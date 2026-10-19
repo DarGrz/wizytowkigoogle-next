@@ -1,0 +1,1 @@
+import type {MetadataRoute} from 'next';import {defaultPages as pages} from '@/lib/service-landings';export default function sitemap():MetadataRoute.Sitemap{const base=process.env.NEXT_PUBLIC_SITE_URL||'https://wizytowkigoogle.pl';return [{url:base,priority:1},...pages.map(p=>({url:base+'/'+p.slug,priority:0.7}))]}

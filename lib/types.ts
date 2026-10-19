@@ -1,0 +1,5 @@
+export type Service={id:string;name:string;short:string;slug:string;description:string;color:string;icon:string;badge:string;priceCents?:number|null;content?:string};
+export type ContentPage={slug:string;title:string;eyebrow:string;intro:string;service:string;sections:{title:string;text:string}[];faq:{question:string;answer:string}[]};
+export const statuses=['nowe','weryfikacja','realizacja','efekt','rozliczone','anulowane'] as const;
+export const statusLabels:Record<string,string>={nowe:'Nowe',weryfikacja:'Weryfikacja',realizacja:'W realizacji',efekt:'Efekt osiągnięty',rozliczone:'Rozliczone',anulowane:'Anulowane'};
+export type Order={id:string;reference:string;service_id:string;company:string;email:string;phone:string;profile_url:string;keywords:string;description:string;billing_name?:string|null;billing_nip?:string|null;billing_address?:string|null;status:string;price_cents:number|null;payment_status:string;goal:string|null;notes:string|null;created_at:string;updated_at:string;attribution:Record<string,string>|null};

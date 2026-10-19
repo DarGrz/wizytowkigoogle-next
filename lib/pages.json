@@ -1,0 +1,428 @@
+[
+  {
+    "slug": "pozycjonowanie-wizytowki-google.html",
+    "title": "Twoja firma bliżej klientów.",
+    "eyebrow": "Pozycjonowanie wizytówki Google",
+    "intro": "Pomagamy lokalnym firmom poprawić widoczność w Google. Zaczynamy od analizy wizytówki, lokalizacji i fraz, które mają znaczenie dla Twojego biznesu.",
+    "service": "pozycjonowanie",
+    "sections": [
+      {
+        "title": "Widoczność tam, gdzie działasz",
+        "text": "Wspólnie wybieramy miejscowość i słowa kluczowe. Analizujemy informacje o firmie, kategorie, ofertę oraz obecność profilu w lokalnych wynikach."
+      },
+      {
+        "title": "Jasne warunki współpracy",
+        "text": "Przed rozpoczęciem ustalamy mierzalny cel, sposób jego sprawdzenia i stałą cenę. Zawsze wiesz, za co płacisz."
+      },
+      {
+        "title": "Profil, który pomaga podjąć decyzję",
+        "text": "Uporządkowane informacje, aktualna oferta i dobre zdjęcia pomagają klientowi poznać Twoją firmę. Prace dobieramy do sytuacji konkretnego profilu."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy gwarantujecie pierwsze miejsce?",
+        "answer": "Nie obiecujemy stałej pierwszej pozycji. Wyniki zależą m.in. od lokalizacji osoby wyszukującej. Ustalamy konkretny cel i sposób pomiaru."
+      },
+      {
+        "question": "Jak wyglądają warunki współpracy?",
+        "answer": "Wszystkie warunki, zakres prac oraz wycenę ustalamy indywidualnie przed rozpoczęciem działań, po bezpłatnej analizie profilu."
+      }
+    ]
+  },
+  {
+    "slug": "ochrona-wizerunku.html",
+    "title": "Zadbaj o dobre imię swojej firmy w sieci.",
+    "eyebrow": "Ochrona Wizerunku",
+    "intro": "Krzywdząca opinia? Nieaktualny profil? Pomagamy chronić dobre imię Twojej firmy w Google i na portalach z opiniami. Od analizy problemu do uzasadnionego zgłoszenia.",
+    "service": "ochrona-wizerunku",
+    "sections": [
+      {
+        "title": "Usuwanie nieprawdziwych i naruszających regulamin opinii",
+        "text": "Analizujemy treść opinii w Google, przygotowujemy formalne zgłoszenia zgodne z prawem i regulaminami serwisów oraz monitorujemy proces ich usunięcia."
+      },
+      {
+        "title": "Likwidacja niechcianych wizytówek i duplikatów",
+        "text": "Sprawdzamy zdublowane i nieaktualne profile oraz podstawy do ich korekty, scalenia lub usunięcia. Sam brak zgody właściciela na utworzenie profilu nie zawsze wystarcza — decyzję podejmuje platforma."
+      },
+      {
+        "title": "Usuwanie opinii i profili z portali",
+        "text": "Weryfikujemy wpisy i profile m.in. na GoWork, Aleo i w Panoramie Firm. Przygotowujemy wnioski z uzasadnieniem i monitorujemy odpowiedzi. Nie gwarantujemy usunięcia prawidłowych danych ani rzetelnych opinii."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy każdą negatywną opinię można usunąć?",
+        "answer": "Nie. Sama krytyka lub brak rozpoznania autora nie wystarczają. Sprawdzamy możliwe naruszenia, np. spam, podszywanie się, groźby lub konflikt interesów, i przygotowujemy uzasadnione zgłoszenie. Ostateczną decyzję podejmuje platforma."
+      },
+      {
+        "question": "Jak długo trwa procedura ochrony wizerunku?",
+        "answer": "Czas zależy od platformy, charakteru wpisów oraz ewentualnego odwołania. Po analizie przedstawiamy plan działania, ale nie gwarantujemy terminu odpowiedzi administratora serwisu. O postępach informujemy na bieżąco."
+      }
+    ]
+  },
+  {
+    "slug": "reklama-google-ads.html",
+    "title": "Daj się zauważyć dzięki Google Ads.",
+    "eyebrow": "Reklama Google Ads",
+    "intro": "Dotrzyj do osób szukających Twoich usług. Przygotujemy kampanię, która kieruje ruch do Twojej firmy i pozwala mierzyć zapytania.",
+    "service": "google-ads",
+    "sections": [
+      {
+        "title": "Szybszy start w wynikach sponsorowanych",
+        "text": "Reklama może zwiększyć widoczność po uruchomieniu i zatwierdzeniu kampanii. Miejsca emisji zależą od aukcji, budżetu i ustawień — nie są stałe."
+      },
+      {
+        "title": "Lokalne zapytania, jasny cel",
+        "text": "Określamy obszar, usługi i działania klientów, które mają być mierzone. Dzięki temu ocena kampanii opiera się na danych, a nie tylko na liczbie kliknięć."
+      },
+      {
+        "title": "Budżet reklamowy i obsługa",
+        "text": "Przed startem osobno ustalamy budżet płacony Google oraz zasady wynagrodzenia za obsługę. Nie pobieramy budżetu reklamowego w tym formularzu."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy reklama to pozycjonowanie?",
+        "answer": "Nie. Reklama daje ekspozycję w płatnych miejscach i nie oznacza wzrostu organicznej pozycji profilu."
+      },
+      {
+        "question": "Czy od razu będę pierwszy?",
+        "answer": "Nie można zagwarantować pierwszego miejsca w każdej aukcji. Zakres emisji uzgadniamy po analizie kampanii."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-wizytowki-google.html",
+    "title": "Uporządkuj obecność swojej firmy w Google.",
+    "eyebrow": "Usuwanie wizytówki Google",
+    "intro": "Prześlij link do wizytówki i opisz sytuację. Sprawdzimy możliwość realizacji oraz ustalimy dokładny rezultat przed przyjęciem zlecenia.",
+    "service": "usuwanie-wizytowki",
+    "sections": [
+      {
+        "title": "Najpierw weryfikacja profilu",
+        "text": "Sprawdzamy, którego profilu dotyczy zgłoszenie, jaki jest jego status i czy osoba składająca zlecenie jest uprawniona do działania w imieniu firmy."
+      },
+      {
+        "title": "Wiesz, jaki efekt osiągamy",
+        "text": "Przed rozpoczęciem określamy zakres, cenę i sposób potwierdzenia wykonania. Nie traktujemy samego wysłania zgłoszenia jako osiągniętego rezultatu."
+      },
+      {
+        "title": "Dedykowana opieka nad sprawą",
+        "text": "Po przesłaniu zapytania kontaktujemy się bezpośrednio, przedstawiając konkretny plan działania oraz odpowiedzi na Twoje pytania."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy każdy profil można usunąć?",
+        "answer": "Możliwość realizacji zależy od konkretnej sytuacji i zasad platformy. Dlatego każdą sprawę najpierw weryfikujemy."
+      },
+      {
+        "question": "Czy usunięcie jest zawsze trwałe?",
+        "answer": "Nie obiecujemy, że profil nigdy nie pojawi się ponownie. Warunki dotyczące ponownego pojawienia się ustalamy indywidualnie."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-firmy-z-google.html",
+    "title": "Co dokładnie chcesz usunąć z Google?",
+    "eyebrow": "Usuwanie firmy z Google",
+    "intro": "Profil w Mapach, wynik wyszukiwania i strona internetowa to różne miejsca publikacji. Pomożemy ustalić zakres sprawy i właściwy kolejny krok.",
+    "service": "usuwanie-wizytowki",
+    "sections": [
+      {
+        "title": "Wskaż konkretne miejsce",
+        "text": "Wklej adres wizytówki lub wyniku, którego dotyczy sprawa. Dopisz, czy firma nadal działa i jakie informacje wymagają zmiany."
+      },
+      {
+        "title": "Jeden profil nie oznacza całego internetu",
+        "text": "Usunięcie profilu nie jest tym samym co usunięcie wszystkich wzmianek o firmie. Każdy typ wyniku wymaga osobnej oceny."
+      },
+      {
+        "title": "Uzgodniony zakres i warunki",
+        "text": "Otrzymasz informację, jaki rezultat możemy objąć działaniami. Cena i plan zostaną ustalone przed rozpoczęciem."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy wystarczy usunąć profil z konta?",
+        "answer": "Usunięcie dostępu do zarządzania nie musi usuwać publicznego profilu. Najpierw ustalamy, czy chodzi o dostęp, dane czy widoczność firmy."
+      },
+      {
+        "question": "Jak zacząć?",
+        "answer": "Wypełnij formularz i podaj link. Nie przekazuj hasła do konta Google."
+      }
+    ]
+  },
+  {
+    "slug": "jak-usunac-firme-z-google.html",
+    "title": "Jak podejść do usunięcia firmy z Google?",
+    "eyebrow": "Poradnik dla właściciela firmy",
+    "intro": "Zanim podejmiesz działania, określ, czy chodzi o błędne dane, zamkniętą firmę, duplikat profilu czy całkowite usunięcie wpisu.",
+    "service": "usuwanie-wizytowki",
+    "sections": [
+      {
+        "title": "1. Ustal, co jest widoczne",
+        "text": "Sprawdź profil w Mapach i wyniki wyszukiwania. Zapisz konkretne linki zamiast opierać się wyłącznie na nazwie firmy."
+      },
+      {
+        "title": "2. Opisz rzeczywistą sytuację",
+        "text": "Podaj, czy firma działa, zmieniła adres albo zakończyła działalność. Nie zgłaszaj nieprawdziwych zmian."
+      },
+      {
+        "title": "3. Wybierz dalszy krok",
+        "text": "Aktualizacja danych, oznaczenie zamknięcia i usunięcie wpisu to odmienne działania. Jeśli potrzebujesz pomocy, prześlij sprawę do oceny."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy formularz od razu usuwa firmę?",
+        "answer": "Nie. Formularz przekazuje zgłoszenie do naszego zespołu. Najpierw sprawdzamy możliwość realizacji i uzgadniamy warunki."
+      },
+      {
+        "question": "Czy potrzebujecie hasła?",
+        "answer": "Nie. Nie wpisuj haseł ani kodów logowania w formularzu."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-gowork.html",
+    "title": "Profil w GoWork? Zacznijmy od weryfikacji.",
+    "eyebrow": "Usuwanie profilu — GoWork",
+    "intro": "Prześlij adres profilu swojej firmy w serwisie GoWork. Ocenimy sprawę i przedstawimy zakres usługi oraz przejrzyste warunki współpracy.",
+    "service": "usuwanie-profili",
+    "sections": [
+      {
+        "title": "Sprawdzamy profil w GoWork",
+        "text": "Potrzebujemy dokładnego adresu profilu, nazwy firmy i opisu sytuacji. Dzięki temu możemy ustalić, czy zgłoszenie kwalifikuje się do realizacji."
+      },
+      {
+        "title": "Cena znana przed startem",
+        "text": "Po weryfikacji przedstawiamy jasne warunki oraz zakres usługi. Wysłanie formularza kontaktowego jest bezpłatne."
+      },
+      {
+        "title": "Profil a link w wyszukiwarce",
+        "text": "Zmiana lub usunięcie treści w portalu i aktualizacja wyników wyszukiwarki to osobne etapy. Zakres obu działań określamy w zleceniu."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy realizacja jest możliwa dla każdej firmy?",
+        "answer": "Nie zakładamy tego z góry. Sprawdzamy konkretny profil i okoliczności przed potwierdzeniem usługi."
+      },
+      {
+        "question": "Czy wystawiacie fakturę VAT?",
+        "answer": "Tak. Za wszystkie wykonane usługi wystawiamy fakturę VAT."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-aleo.html",
+    "title": "Profil w Aleo? Zacznijmy od weryfikacji.",
+    "eyebrow": "Usuwanie profilu — Aleo",
+    "intro": "Prześlij adres profilu swojej firmy w serwisie Aleo. Ocenimy sprawę i przedstawimy zakres usługi oraz przejrzyste warunki współpracy.",
+    "service": "usuwanie-profili",
+    "sections": [
+      {
+        "title": "Sprawdzamy profil w Aleo",
+        "text": "Potrzebujemy dokładnego adresu profilu, nazwy firmy i opisu sytuacji. Dzięki temu możemy ustalić, czy zgłoszenie kwalifikuje się do realizacji."
+      },
+      {
+        "title": "Cena znana przed startem",
+        "text": "Po weryfikacji przedstawiamy jasne warunki oraz zakres usługi. Wysłanie formularza kontaktowego jest bezpłatne."
+      },
+      {
+        "title": "Profil a link w wyszukiwarce",
+        "text": "Zmiana lub usunięcie treści w portalu i aktualizacja wyników wyszukiwarki to osobne etapy. Zakres obu działań określamy w zleceniu."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy realizacja jest możliwa dla każdej firmy?",
+        "answer": "Nie zakładamy tego z góry. Sprawdzamy konkretny profil i okoliczności przed potwierdzeniem usługi."
+      },
+      {
+        "question": "Czy wystawiacie fakturę VAT?",
+        "answer": "Tak. Za wszystkie wykonane usługi wystawiamy fakturę VAT."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-panorama-firm.html",
+    "title": "Profil w Panorama Firm? Zacznijmy od weryfikacji.",
+    "eyebrow": "Usuwanie profilu — Panorama Firm",
+    "intro": "Prześlij adres profilu swojej firmy w serwisie Panorama Firm. Ocenimy sprawę i przedstawimy zakres usługi oraz przejrzyste warunki współpracy.",
+    "service": "usuwanie-profili",
+    "sections": [
+      {
+        "title": "Sprawdzamy profil w Panorama Firm",
+        "text": "Potrzebujemy dokładnego adresu profilu, nazwy firmy i opisu sytuacji. Dzięki temu możemy ustalić, czy zgłoszenie kwalifikuje się do realizacji."
+      },
+      {
+        "title": "Cena znana przed startem",
+        "text": "Po weryfikacji przedstawiamy jasne warunki oraz zakres usługi. Wysłanie formularza kontaktowego jest bezpłatne."
+      },
+      {
+        "title": "Profil a link w wyszukiwarce",
+        "text": "Zmiana lub usunięcie treści w portalu i aktualizacja wyników wyszukiwarki to osobne etapy. Zakres obu działań określamy w zleceniu."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy realizacja jest możliwa dla każdej firmy?",
+        "answer": "Nie zakładamy tego z góry. Sprawdzamy konkretny profil i okoliczności przed potwierdzeniem usługi."
+      },
+      {
+        "question": "Czy wystawiacie fakturę VAT?",
+        "answer": "Tak. Za wszystkie wykonane usługi wystawiamy fakturę VAT."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-opinii-google.html",
+    "title": "Zgłoś opinię do oceny.",
+    "eyebrow": "Usuwanie opinii Google",
+    "intro": "Nie każda negatywna opinia kwalifikuje się do usunięcia. Prześlij treść i informacje o wpisie, a ocenimy możliwość dalszych działań.",
+    "service": "usuwanie-opinii",
+    "sections": [
+      {
+        "title": "Ważna jest treść i kontekst",
+        "text": "Podaj autora, treść opinii i link do wizytówki. Opisz konkretnie, co budzi zastrzeżenia. Sam fakt niskiej oceny nie przesądza o usunięciu."
+      },
+      {
+        "title": "Bez obietnic w ciemno",
+        "text": "Najpierw oceniamy zgłoszenie. Zakres działania i warunki współpracy potwierdzamy przed rozpoczęciem."
+      },
+      {
+        "title": "Poufna obsługa sprawy",
+        "text": "Informacje przekazane w formularzu służą ocenie i realizacji zgłoszenia. Nie publikujemy ich jako materiałów promocyjnych."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy usuwacie każdą negatywną opinię?",
+        "answer": "Nie. Usunięcie zależy od podstaw zgłoszenia i decyzji platformy."
+      },
+      {
+        "question": "Czy formularz jest płatny?",
+        "answer": "Samo wysłanie zgłoszenia do weryfikacji nie powoduje pobrania płatności."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-opinii-google-cena.html",
+    "title": "Ile kosztuje obsługa Twojej sprawy?",
+    "eyebrow": "Usuwanie opinii Google — cena",
+    "intro": "Koszt ustalamy po ocenie opinii i zakresu pracy. Przed rozpoczęciem otrzymasz cenę oraz opis planowanych działań.",
+    "service": "usuwanie-opinii",
+    "sections": [
+      {
+        "title": "Co wpływa na wycenę",
+        "text": "Znaczenie mają liczba wpisów, ich treść oraz zakres sprawy. Dlatego potrzebujemy konkretnych danych, zanim potwierdzimy ofertę."
+      },
+      {
+        "title": "Jasne warunki",
+        "text": "W zleceniu zapisujemy uzgodnioną kwotę i zakres. Późniejsze zmiany cennika nie zmieniają wcześniejszych ustaleń."
+      },
+      {
+        "title": "Wyślij sprawę do oceny",
+        "text": "Wypełnij formularz i opisz opinie. Odpowiemy z informacją o możliwości działania i warunkach."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy zapłacę za samo zgłoszenie?",
+        "answer": "Nie pobieramy płatności podczas wysyłania formularza."
+      },
+      {
+        "question": "Jak wygląda wycena sprawy?",
+        "answer": "Wycenę przedstawiamy bezpłatnie po przeanalizowaniu profilu firmy oraz treści wpisów."
+      }
+    ]
+  },
+  {
+    "slug": "usuwanie-opinii-formularz.html",
+    "title": "Opisz opinię. Sprawdzimy możliwości.",
+    "eyebrow": "Formularz zgłoszenia opinii",
+    "intro": "Wybierz usługę usuwania opinii i uzupełnij dane. W opisie podaj autora i treść wpisu oraz wyjaśnij powód zgłoszenia.",
+    "service": "usuwanie-opinii",
+    "sections": [
+      {
+        "title": "Przygotuj informacje",
+        "text": "Przyda się link do wizytówki, autor, treść opinii oraz opis sytuacji."
+      },
+      {
+        "title": "Szybki kontakt zwrotny",
+        "text": "Po przesłaniu zgłoszenia przeanalizujemy treść opinii i skontaktujemy się z gotową wyceną oraz planem działania."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy trzeba podawać hasło do Google?",
+        "answer": "Nie. Nie prosimy o hasło ani kod jednorazowy."
+      }
+    ]
+  },
+  {
+    "slug": "weryfikacja-wizytowek-google.html",
+    "title": "Potwierdź swoją firmę w Google.",
+    "eyebrow": "Pomoc w weryfikacji wizytówki",
+    "intro": "Pomagamy przygotować się do weryfikacji i uporządkować informacje o rzeczywiście działającej firmie.",
+    "service": "weryfikacja",
+    "sections": [
+      {
+        "title": "Sprawdzamy obecną sytuację",
+        "text": "Opisz, na jakim etapie zatrzymał się proces. Podaj informacje o profilu i komunikatach wyświetlanych w panelu."
+      },
+      {
+        "title": "Przygotowanie danych",
+        "text": "Pomagamy określić, jakich informacji brakuje i jakie materiały mogą być potrzebne w procesie wskazanym przez Google."
+      },
+      {
+        "title": "Właściciel zachowuje kontrolę",
+        "text": "Nie potrzebujemy Twojego hasła. Dostępy i działania uzgadniamy przed rozpoczęciem."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy wybieracie metodę weryfikacji?",
+        "answer": "Dostępne metody wskazuje Google. Nie obiecujemy konkretnej ścieżki ani obejścia weryfikacji."
+      },
+      {
+        "question": "Czy każda firma kwalifikuje się do profilu?",
+        "answer": "Najpierw sprawdzamy rzeczywistą działalność i warunki prowadzenia profilu."
+      }
+    ]
+  },
+  {
+    "slug": "odwieszanie-wizytowek-google.html",
+    "title": "Zawieszona wizytówka? Ustalmy przyczynę.",
+    "eyebrow": "Pomoc przy zawieszeniu profilu",
+    "intro": "Przeanalizujemy informacje o profilu i pomożemy przygotować sprawę do odwołania. Zaczynamy od diagnozy, nie od składania kolejnych identycznych zgłoszeń.",
+    "service": "odwieszanie",
+    "sections": [
+      {
+        "title": "Diagnoza przed odwołaniem",
+        "text": "Podaj link, treść komunikatu i datę wystąpienia problemu. Opisz ostatnie zmiany w profilu."
+      },
+      {
+        "title": "Uporządkowanie informacji",
+        "text": "Sprawdzamy spójność danych firmy i pomagamy przygotować materiały odnoszące się do rzeczywistej działalności."
+      },
+      {
+        "title": "Warunki znane przed startem",
+        "text": "Zakres pomocy, rezultat i wynagrodzenie określamy po weryfikacji. O przywróceniu profilu decyduje platforma."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Czy przywrócenie jest pewne?",
+        "answer": "Nie można zagwarantować decyzji Google. Przed przyjęciem sprawy oceniamy możliwości."
+      },
+      {
+        "question": "Czy tworzyć kolejny profil?",
+        "answer": "Nie podejmuj pochopnych działań. Najpierw ustalmy status istniejącej wizytówki i historię odwołań."
+      }
+    ]
+  }
+]

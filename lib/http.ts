@@ -1,0 +1,2 @@
+export async function body(req:Request){if(Number(req.headers.get('content-length')||0)>20000)throw new Error('PAYLOAD_TOO_LARGE');const text=await req.text();if(Buffer.byteLength(text)>20000)throw new Error('PAYLOAD_TOO_LARGE');return JSON.parse(text)}
+export function fail(error:unknown){console.error(error instanceof Error?error.message:'Request failed');return Response.json({error:'Nie udało się wykonać operacji. Spróbuj ponownie później.'},{status:503})}

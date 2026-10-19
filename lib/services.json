@@ -1,0 +1,32 @@
+[
+  {
+    "id": "pozycjonowanie",
+    "name": "Pozycjonowanie wizytówki",
+    "short": "Pozycjonowanie",
+    "slug": "pozycjonowanie-wizytowki-google.html",
+    "description": "Większa widoczność w Twojej okolicy i wyższe pozycje w Mapach Google.",
+    "color": "lavender",
+    "icon": "map",
+    "badge": "Lepsza widoczność"
+  },
+  {
+    "id": "google-ads",
+    "name": "Reklama Google Ads",
+    "short": "Google Ads",
+    "slug": "reklama-google-ads.html",
+    "description": "Daj się zauważyć w wynikach sponsorowanych i natychmiast pozyskuj klientów.",
+    "color": "yellow",
+    "icon": "megaphone",
+    "badge": "Szybki start"
+  },
+  {
+    "id": "ochrona-wizerunku",
+    "name": "Ochrona Wizerunku",
+    "short": "Ochrona wizerunku",
+    "slug": "ochrona-wizerunku.html",
+    "description": "Usuwanie nieprawdziwych opinii, szkodliwych wpisów i niechcianych wizytówek.",
+    "color": "mint",
+    "icon": "shield",
+    "badge": "Bezpieczna marka"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "name": "wizytowkigoogle",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "db:init": "node --env-file=.env.local --import tsx scripts/init-db.mjs",
+    "db:sync-pages": "node --env-file=.env.local --import tsx scripts/sync-pages.ts",
+    "db:sync-services": "node --env-file=.env.local scripts/sync-services.mjs",
+    "db:migrate-payments": "node --env-file=.env.local scripts/migrate-payments.mjs",
+    "mail:worker": "node --env-file=.env.local scripts/mail-worker.mjs",
+    "preview:build": "node scripts/build-preview.mjs"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.3.0",
+    "next": "16.4.2",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "mysql2": "^3.15.3",
+    "zod": "^4.3.6",
+    "nodemailer": "^7.0.12",
+    "lucide-react": "^0.577.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/node": "^24.12.0",
+    "@types/nodemailer": "^7.0.11",
+    "tsx": "^4.21.0"
+  }
+}

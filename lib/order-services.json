@@ -1,0 +1,18 @@
+{
+  "google": [
+    { "id": "pozycjonowanie", "name": "Pozycjonowanie wizytówki Google" },
+    { "id": "usuwanie-opinii", "name": "Usuwanie opinii Google" },
+    { "id": "google-ads", "name": "Reklama Google Ads" },
+    { "id": "usuwanie-wizytowki", "name": "Usuwanie wizytówki Google" },
+    { "id": "resetowanie-wizytowki", "name": "Resetowanie wizytówki Google" }
+  ],
+  "portals": [
+    { "id": "usuwanie-opinii-portale", "name": "Usuwanie opinii z portali" },
+    { "id": "usuwanie-profili", "name": "Usuwanie profili firmowych" },
+    { "id": "usuwanie-profilu-gowork", "name": "Usuwanie profilu GoWork" }
+  ],
+  "legacy": [
+    { "id": "weryfikacja", "name": "Weryfikacja wizytówki" },
+    { "id": "odwieszanie", "name": "Odwieszanie wizytówki" }
+  ]
+}

@@ -1,0 +1,1 @@
+"use client";export default function ErrorPage({reset}:{reset:()=>void}){return <main id="main" className="wrap empty-page"><h1>Chwila przerwy.</h1><p>Nie udało się załadować danych. Spróbuj ponownie za moment.</p><button className="button primary" onClick={reset}>Spróbuj ponownie</button></main>}

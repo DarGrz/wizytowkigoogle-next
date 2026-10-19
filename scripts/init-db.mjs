@@ -1,0 +1,9 @@
+import mysql from 'mysql2/promise';import {readFile} from 'node:fs/promises';import {randomUUID,randomBytes,scryptSync} from 'node:crypto';
+import {defaultPages} from '../lib/service-landings.ts';
+if(!process.env.DATABASE_URL)throw Error('Ustaw DATABASE_URL');
+if(!process.env.ADMIN_EMAIL||!process.env.ADMIN_PASSWORD||process.env.ADMIN_PASSWORD.length<14||process.env.ADMIN_PASSWORD.startsWith('CHANGE_ME'))throw Error('Ustaw ADMIN_EMAIL i silne ADMIN_PASSWORD (min. 14 znaków)');
+if(!process.env.IP_HASH_SECRET||process.env.IP_HASH_SECRET.length<32||process.env.IP_HASH_SECRET.startsWith('CHANGE_ME'))throw Error('Ustaw losowy IP_HASH_SECRET (min. 32 znaki)');
+const db=await mysql.createConnection(process.env.DATABASE_URL);const sql=await readFile(new URL('./schema.sql',import.meta.url),'utf8');for(const s of sql.split(';').map(s=>s.trim()).filter(Boolean))await db.query(s);
+const services=JSON.parse(await readFile(new URL('../lib/services.json',import.meta.url),'utf8'));const catalog=JSON.parse(await readFile(new URL('../lib/order-services.json',import.meta.url),'utf8'));services.push(...[...catalog.google,...catalog.portals,...catalog.legacy].filter(s=>!services.some(existing=>existing.id===s.id)));for(const s of services)await db.execute('INSERT IGNORE INTO services(id,name,content) VALUES (?,?,?)',[s.id,s.name,s.description||'Wycena po weryfikacji']);
+for(const p of defaultPages)await db.execute('INSERT IGNORE INTO pages(slug,content) VALUES (?,?)',[p.slug,JSON.stringify(p)]);
+const salt=randomBytes(16).toString('hex'),hash=salt+':'+scryptSync(process.env.ADMIN_PASSWORD,salt,64).toString('hex');await db.execute('INSERT INTO admins(id,email,password_hash) VALUES (?,?,?) ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash)',[randomUUID(),process.env.ADMIN_EMAIL.toLowerCase(),hash]);await db.end();console.log('Baza gotowa. Konto administratora utworzone/zaktualizowane.');

@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function NotFound(){return <main id="main" className="wrap empty-page"><span className="pill">404</span><h1>Tu jeszcze nas nie ma.</h1><p>Sprawdź adres albo wróć do naszych usług.</p><Link className="button primary" href="/">Wróć na stronę główną ↗</Link></main>}

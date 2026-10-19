@@ -1,0 +1,1 @@
+export function money(cents:number|null|undefined){return cents==null?'Wycena po weryfikacji':new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(cents/100)+' brutto'}
