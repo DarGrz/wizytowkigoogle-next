@@ -59,11 +59,11 @@ export default function ServiceLanding({ page, landing, pages }: {
         <h1>{page.title}</h1>
         <p className="sl-intro">{page.intro}</p>
         <div className="sl-actions">
-          <a href="tel:+48527275002" className="sl-hero-phone-badge" aria-label="Zadzwoń: 527 275 002">
+          <a href="tel:+48572275002" className="sl-hero-phone-badge" aria-label="Zadzwoń: 572 275 002">
             <span className="sl-phone-icon"><Phone size={22} /></span>
             <span className="sl-phone-info">
               <small>Zadzwoń i zapytaj</small>
-              <strong>527 275 002</strong>
+              <strong>572 275 002</strong>
             </span>
             <span className="sl-hero-phone-action" aria-hidden="true">
               <span>Zadzwoń</span>
@@ -92,11 +92,11 @@ export default function ServiceLanding({ page, landing, pages }: {
       <div>
         <p className="eyebrow">Bez zbędnego komplikowania</p>
         <h2 id="sl-process-title">Od problemu<br />do obsługi sprawy.</h2>
-        <a href="tel:+48527275002" className="sl-hero-phone-badge small-badge" aria-label="Zadzwoń: 527 275 002">
+        <a href="tel:+48572275002" className="sl-hero-phone-badge small-badge" aria-label="Zadzwoń: 572 275 002">
           <span className="sl-phone-icon"><Phone size={18} /></span>
           <span className="sl-phone-info">
             <small>Zadzwoń i zapytaj</small>
-            <strong>527 275 002</strong>
+            <strong>572 275 002</strong>
           </span>
         </a>
       </div>
@@ -115,9 +115,9 @@ export default function ServiceLanding({ page, landing, pages }: {
           <p>Nie musisz wypełniać formularzy. Podczas krótkiej rozmowy telefonicznej bezpłatnie przeanalizujemy sytuację profilu i odpowiemy na wszystkie pytania.</p>
         </div>
         <div className="sl-phone-badge-wrapper">
-          <a href="tel:+48527275002" className="sl-big-phone-btn" aria-label="Zadzwoń do nas: 527 275 002">
+          <a href="tel:+48572275002" className="sl-big-phone-btn" aria-label="Zadzwoń do nas: 572 275 002">
             <Phone size={26} />
-            <span className="sl-big-phone-number">527 275 002</span>
+            <span className="sl-big-phone-number">572 275 002</span>
           </a>
           <span className="sl-phone-sub">Zadzwoń teraz • Szybka, bezpłatna konsultacja profilu</span>
         </div>

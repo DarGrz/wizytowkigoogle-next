@@ -32,7 +32,7 @@ const demoOrders: Order[] = [
     reference: 'DEMO-001',
     company: 'Przykładowa Kwiaciarnia',
     email: 'demo@example.com',
-    phone: '527 275 002',
+    phone: '572 275 002',
     profile_url: '',
     keywords: 'kwiaciarnia, Warszawa',
     description: 'Przykładowe zgłoszenie pokazujące układ panelu.',
@@ -51,7 +51,7 @@ const demoOrders: Order[] = [
     reference: 'DEMO-002',
     company: 'Przykładowy Warsztat',
     email: 'demo@example.com',
-    phone: '527 275 002',
+    phone: '572 275 002',
     profile_url: '',
     keywords: '',
     description: 'Dane demonstracyjne, nie są prawdziwym zleceniem.',
@@ -563,11 +563,11 @@ export default function AdminPanel({ demo }: { demo: boolean }) {
                         <td>
                           {isPhoneClick ? (
                             <span className="act-badge phone">
-                              <Phone size={12} /> {v.phone_number || '527 275 002'}
+                              <Phone size={12} /> {v.phone_number || '572 275 002'}
                             </span>
                           ) : isPhoneMenu ? (
                             <span className="act-badge menu">
-                              📋 Menu: {v.phone_number || '527 275 002'}
+                              📋 Menu: {v.phone_number || '572 275 002'}
                             </span>
                           ) : isCompany ? (
                             <span className="act-badge company">

@@ -113,15 +113,15 @@ export default function Header() {
               <span>Sprawdź wizytówkę</span>
             </button>
 
-            <a href="tel:+48527275002" className="button dark small header-phone-cta" onClick={() => setOpen(false)}>
-              <Phone size={15} style={{ marginRight: '6px' }} /> 527 275 002
+            <a href="tel:+48572275002" className="button dark small header-phone-cta" onClick={() => setOpen(false)}>
+              <Phone size={15} style={{ marginRight: '6px' }} /> 572 275 002
             </a>
           </nav>
 
           <div className="nav-mobile-right">
-            <a href="tel:+48527275002" className="nav-mobile-phone" aria-label="Zadzwoń: +48 527 275 002">
+            <a href="tel:+48572275002" className="nav-mobile-phone" aria-label="Zadzwoń: +48 572 275 002">
               <Phone size={14} />
-              <span>527 275 002</span>
+              <span>572 275 002</span>
             </a>
 
             <button
@@ -138,16 +138,16 @@ export default function Header() {
 
       {/* Mobile Sticky Phone Badge appearing on scroll */}
       <a
-        href="tel:+48527275002"
+        href="tel:+48572275002"
         className={`mobile-sticky-phone ${scrolled ? 'visible' : ''}`}
-        aria-label="Zadzwoń: +48 527 275 002"
+        aria-label="Zadzwoń: +48 572 275 002"
       >
         <span className="sticky-phone-icon">
           <Phone size={17} />
         </span>
         <span className="sticky-phone-text">
           <small>Zadzwoń teraz</small>
-          <strong>527 275 002</strong>
+          <strong>572 275 002</strong>
         </span>
       </a>
 

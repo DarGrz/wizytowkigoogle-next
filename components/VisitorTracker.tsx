@@ -164,8 +164,8 @@ export default function VisitorTracker() {
         const raw = link.getAttribute('href') || '';
         const phone = raw.replace('tel:', '').trim();
         sendData(collectData('PHONE_CONTEXT_MENU', phone));
-      } else if (target.textContent && /527\s*275\s*002/.test(target.textContent)) {
-        sendData(collectData('PHONE_CONTEXT_MENU', '527275002'));
+      } else if (target.textContent && /572\s*275\s*002/.test(target.textContent)) {
+        sendData(collectData('PHONE_CONTEXT_MENU', '572275002'));
       }
     }
 

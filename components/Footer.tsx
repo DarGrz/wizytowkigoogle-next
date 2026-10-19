@@ -16,13 +16,13 @@ export default function Footer() {
         </div>
 
         <div className="footer-contact-actions">
-          <a href="tel:+48527275002" className="footer-phone-btn" aria-label="Zadzwoń: 527 275 002">
+          <a href="tel:+48572275002" className="footer-phone-btn" aria-label="Zadzwoń: 572 275 002">
             <span className="footer-icon-pulse">
               <Phone size={22} />
             </span>
             <div className="footer-phone-text">
               <small>Zadzwoń i zapytaj</small>
-              <strong>527 275 002</strong>
+              <strong>572 275 002</strong>
             </div>
             <ArrowUpRight size={18} className="footer-arrow" />
           </a>
@@ -50,7 +50,7 @@ export default function Footer() {
           />
         </Link>
         <p>Widoczność, która pracuje na Twój biznes.</p>
-        <a href="tel:+48527275002">tel. 527 275 002</a>
+        <a href="tel:+48572275002">tel. 572 275 002</a>
         <a href="mailto:kontakt@wizytowkigoogle.pl">kontakt@wizytowkigoogle.pl</a>
         <Link href="/polityka-prywatnosci">Prywatność</Link>
       </div>

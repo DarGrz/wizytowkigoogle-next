@@ -65,16 +65,16 @@ export default function ContactSection() {
           {/* Big Phone Badge */}
           <div className="contact-phone-cta-wrapper">
             <a
-              href="tel:+48527275002"
+              href="tel:+48572275002"
               className="contact-phone-main-badge"
-              aria-label="Zadzwoń teraz: 527 275 002"
+              aria-label="Zadzwoń teraz: 572 275 002"
             >
               <span className="phone-pulse-icon">
                 <Phone size={26} />
               </span>
               <div className="phone-badge-text">
                 <small>Kliknij, aby połączyć</small>
-                <strong>527 275 002</strong>
+                <strong>572 275 002</strong>
               </div>
             </a>
             <span className="phone-availability-tag">

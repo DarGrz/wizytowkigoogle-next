@@ -390,10 +390,10 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
                   </div>
                 </div>
                 <div className="gmb-alert-actions">
-                  <a href="tel:+48527275002" className="gmb-choice-pill">
+                  <a href="tel:+48572275002" className="gmb-choice-pill">
                     🛡️ Usuwanie negatywnych opinii — zadzwoń
                   </a>
-                  <a href="tel:+48527275002" className="gmb-choice-pill">
+                  <a href="tel:+48572275002" className="gmb-choice-pill">
                     🔄 Resetowanie wizytówki (czysty profil) — zadzwoń
                   </a>
                 </div>
@@ -440,16 +440,16 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
               </p>
               <div className="gmb-modal-phone-wrap">
                 <a
-                  href="tel:+48527275002"
+                  href="tel:+48572275002"
                   className="gmb-modal-phone-btn"
-                  aria-label="Zadzwoń do specjalisty: 527 275 002"
+                  aria-label="Zadzwoń do specjalisty: 572 275 002"
                 >
                   <span className="phone-pulse-icon">
                     <Phone size={24} />
                   </span>
                   <div className="phone-badge-text">
                     <small>Kliknij i połącz się</small>
-                    <strong>527 275 002</strong>
+                    <strong>572 275 002</strong>
                   </div>
                 </a>
               </div>

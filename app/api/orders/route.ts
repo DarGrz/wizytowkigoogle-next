@@ -89,7 +89,7 @@ export async function POST(req: Request) {
         id, 'nowe', 'Zgłoszenie zapisane. Wkrótce skontaktuje się z Tobą przydzielony opiekun.', 'system'
       ]);
 
-      const clientEmailText = `Dzień dobry,\n\nDziękujemy za złożenie zamówienia ${reference} dla firmy ${d.company}.\n\nUsługa: ${quote?.serviceName || d.service}\n\nWkrótce skontaktuje się z Tobą przydzielony opiekun, aby omówić szczegóły i potwierdzić realizację.\n\nwizytowkigoogle.pl\ntel. 527 275 002`;
+      const clientEmailText = `Dzień dobry,\n\nDziękujemy za złożenie zamówienia ${reference} dla firmy ${d.company}.\n\nUsługa: ${quote?.serviceName || d.service}\n\nWkrótce skontaktuje się z Tobą przydzielony opiekun, aby omówić szczegóły i potwierdzić realizację.\n\nwizytowkigoogle.pl\ntel. 572 275 002`;
 
       await conn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [randomUUID(), d.email, `Przyjęliśmy zgłoszenie ${reference}`, clientEmailText]);
       if (process.env.ADMIN_NOTIFY_EMAIL) {

@@ -23,13 +23,13 @@ export default function ReputationPage({ page }: { page: ContentPage }) {
         <h1>Dobra firma.<br />Dobre imię.<br /><span>Warto je chronić.</span></h1>
         <p>{page.intro}</p>
         <div className="rep-hero-actions">
-          <a href="tel:+48527275002" className="hero-phone-badge-large" aria-label="Zadzwoń: 527 275 002">
+          <a href="tel:+48572275002" className="hero-phone-badge-large" aria-label="Zadzwoń: 572 275 002">
             <span className="hero-phone-badge-icon">
               <Phone size={22} />
             </span>
             <span className="hero-phone-badge-content">
               <small>Zadzwoń i zapytaj • Bezpłatna diagnoza</small>
-              <strong>527 275 002</strong>
+              <strong>572 275 002</strong>
             </span>
             <span className="hero-phone-badge-action" aria-hidden="true">
               <span>Zadzwoń</span>
