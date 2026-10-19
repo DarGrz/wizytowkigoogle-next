@@ -3,6 +3,7 @@ import { body } from '@/lib/http';
 import { sameOrigin } from '@/lib/security';
 import { normalizeNip, validNip } from '@/lib/company';
 import { searchGus } from '@/lib/gus';
+import { recordCompanySearch } from '@/lib/visit-tracker';
 
 export const runtime = 'nodejs';
 const schema = z.object({ nip: z.string().max(20).transform(normalizeNip).refine(validNip) });
@@ -30,6 +31,17 @@ export async function POST(request: Request) {
   if (++requests > 40) return Response.json({ error: 'Limit wyszukiwań GUS. Spróbuj ponownie za minutę.' }, { status: 429, headers: { 'Retry-After': '60' } });
   try {
     const results = await searchGus(parsed.data.nip);
+    if (results && results.length > 0) {
+      void recordCompanySearch(request, {
+        searchType: 'gus',
+        searchQuery: parsed.data.nip,
+        companyName: results[0]?.name || null,
+        companyNip: results[0]?.nip || parsed.data.nip,
+        companyRegon: results[0]?.regon || null,
+        companyAddress: results[0]?.address || null,
+        companyData: results,
+      });
+    }
     return Response.json({ results }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {
     console.error('GUS_LOOKUP_FAILED');

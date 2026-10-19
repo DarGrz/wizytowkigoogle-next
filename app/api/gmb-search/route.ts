@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { recordCompanySearch } from '@/lib/visit-tracker';
 
 interface GooglePrediction {
   description: string;
@@ -74,6 +75,17 @@ export async function GET(request: NextRequest) {
     }));
 
     cache.set(cacheKey, { data: results, expires: Date.now() + CACHE_TTL });
+
+    if (results.length > 0) {
+      void recordCompanySearch(request, {
+        searchType: 'google_maps',
+        searchQuery: query,
+        companyName: results[0]?.name || query,
+        companyAddress: results[0]?.address || null,
+        placeId: results[0]?.placeId || null,
+        companyData: results,
+      });
+    }
 
     return NextResponse.json(
       { results },

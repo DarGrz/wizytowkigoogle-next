@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { recordCompanySearch } from '@/lib/visit-tracker';
 
 interface GooglePlaceDetailsResult {
   name: string;
@@ -117,6 +118,19 @@ export async function GET(request: NextRequest) {
     };
 
     cache.set(placeId, { data: details, expires: Date.now() + CACHE_TTL });
+
+    void recordCompanySearch(request, {
+      searchType: 'places_details',
+      searchQuery: details.name,
+      companyName: details.name,
+      companyAddress: details.address,
+      companyPhone: details.phoneNumber || null,
+      companyWebsite: details.website || null,
+      companyRating: details.rating || null,
+      companyReviewsCount: details.user_ratings_total || null,
+      placeId: details.id,
+      companyData: details,
+    });
 
     return NextResponse.json({ details });
   } catch (error) {
