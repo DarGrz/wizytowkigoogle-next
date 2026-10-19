@@ -3,6 +3,14 @@ import { serviceLandings } from './lib/service-landings';
 
 const config: NextConfig = {
   poweredByHeader: false,
+  async rewrites() {
+    return [
+      {
+        source: '/log_visitor.php',
+        destination: '/api/tracking',
+      },
+    ];
+  },
   async redirects() {
     return serviceLandings.map((page) => ({
       source: `/${page.slug}.html`,

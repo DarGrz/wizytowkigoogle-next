@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Consent from '@/components/Consent';
+import VisitorTracker from '@/components/VisitorTracker';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://wizytowkigoogle.pl'),
@@ -48,6 +49,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <Consent />
+        <VisitorTracker />
       </body>
     </html>
   );

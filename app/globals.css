@@ -744,3 +744,190 @@
   }
 }
 
+
+/* Visitor Analytics in Admin */
+.visits-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 25px 0 15px;
+}
+.visits-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.visits-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #ddd3e7;
+  border-radius: 10px;
+  padding: 0 12px;
+  min-width: 220px;
+  flex: 1;
+}
+.visits-search-box input {
+  border: 0;
+  background: none;
+  margin: 0;
+  padding: 10px 0;
+  font-size: 13px;
+}
+.visits-filters select, .visits-filters input[type="date"] {
+  background: white;
+  border: 1px solid #ddd3e7;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 13px;
+  margin: 0;
+  width: auto;
+}
+.visits-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-export-csv {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
+  cursor: pointer;
+}
+.btn-export-csv:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+  background: var(--lavender);
+}
+.btn-clear-filter {
+  background: #fecdd3;
+  color: #9f1239;
+  border: 1px solid #f43f5e;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tr-phone-click {
+  background: #fffbeb !important;
+}
+.tr-phone-click:hover {
+  background: #fef3c7 !important;
+}
+.tr-phone-menu {
+  background: #faf5ff !important;
+}
+.tr-phone-menu:hover {
+  background: #f3e8ff !important;
+}
+.tr-company {
+  background: #f0fdf4 !important;
+}
+.tr-company:hover {
+  background: #dcfce7 !important;
+}
+.tr-repeat {
+  border-left: 3px solid #8b5cf6;
+}
+
+.act-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.act-badge.phone {
+  background: var(--yellow);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.act-badge.menu {
+  background: var(--lavender);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.act-badge.company {
+  background: var(--mint);
+  color: #14532d;
+  border: 1px solid #16a34a;
+}
+.act-badge.visit {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.fp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: monospace;
+  font-size: 11px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.repeat-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  color: #6b21a8;
+  background: #ede9fe;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 3px;
+}
+
+.pagination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 15px 0 30px;
+}
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pagination-btn {
+  background: white;
+  border: 1px solid #d2c6df;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pagination-btn:hover:not(:disabled) {
+  background: var(--lavender);
+}
+.pagination-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
