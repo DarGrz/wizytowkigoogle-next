@@ -2,7 +2,6 @@ import type { NextConfig } from 'next';
 import { serviceLandings } from './lib/service-landings';
 
 const config: NextConfig = {
-  output: process.env.VERCEL ? undefined : 'standalone',
   poweredByHeader: false,
   async redirects() {
     return serviceLandings.map((page) => ({
