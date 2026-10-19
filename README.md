@@ -118,3 +118,4 @@ Worker usuwa wygasłe sesje i limity, analitykę starszą niż 90 dni, pełne IP
 - Ograniczenie profili portalowych do JDG/spółek cywilnych jest egzekwowane w UI, walidacji formularza i przez ponowne sprawdzenie danych GUS przy zapisie. Usuwanie opinii na portalach oraz wszystkie zgłoszenia Google pozostają dostępne dla pozostałych form.
 - Cennik i walidacja formularza ochrony wizerunku, obliczanie VAT, konfiguracja PayU oraz podpis MD5 powiadomień operatora są pokryte testami. Transakcji PayU nie można zweryfikować bez danych dostępowych sprzedawcy i publicznego endpointu HTTPS.
 - Nadal nie wykonano testu zapisu na działającym MySQL/SMTP. Lokalnie brak `DATABASE_URL`; wysyłanie zgłoszeń pozostaje wyłączone. Nie należy traktować samego podglądu jako potwierdzenia gotowości produkcyjnej zapisu i poczty.
+# wizytowkigoogle-next
