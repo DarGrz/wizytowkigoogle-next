@@ -266,3 +266,262 @@
     letter-spacing:-.2px;
   }
 }
+
+/* Big Hero Phone Badge */
+.hero-phone-badge-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 10px 24px 10px 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .18s cubic-bezier(0.16,1,0.3,1), box-shadow .18s, background .15s;
+}
+.hero-phone-badge-large:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+  background: #fcd34d;
+}
+.hero-phone-badge-large:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.hero-phone-badge-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  flex-shrink: 0;
+  animation: phoneWiggle 3.5s infinite ease-in-out;
+}
+.hero-phone-badge-content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+.hero-phone-badge-content small {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #4d3a68;
+}
+.hero-phone-badge-content strong {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -.5px;
+}
+
+@media(max-width:640px){
+  .hero-phone-badge-large {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+  }
+}
+
+/* Contact Section Phone Lead Card */
+.phone-lead-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.contact-phone-cta-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 4px 5px 0 var(--ink);
+  text-align: center;
+}
+.contact-phone-main-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 14px 28px;
+  box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .18s cubic-bezier(0.16,1,0.3,1), box-shadow .18s;
+  width: 100%;
+  max-width: 380px;
+  justify-content: center;
+}
+.contact-phone-main-badge:hover {
+  transform: translate(-2px, -2px) scale(1.02);
+  box-shadow: 6px 7px 0 var(--ink);
+}
+.contact-phone-main-badge:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.phone-pulse-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  flex-shrink: 0;
+  animation: phoneWiggle 3.5s infinite ease-in-out;
+}
+.phone-badge-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.15;
+}
+.phone-badge-text small {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  color: #4d3a68;
+}
+.phone-badge-text strong {
+  font-size: 24px;
+  font-weight: 950;
+  letter-spacing: -.5px;
+}
+.phone-availability-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #4a3861;
+}
+
+.contact-card-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #fbf9f4;
+  border: 1px solid #23113f20;
+  border-radius: 14px;
+}
+.contact-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.contact-perk-item .perk-check {
+  color: #166534;
+  flex-shrink: 0;
+}
+.contact-alt-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #eef2ff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #334155;
+}
+.contact-alt-box a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Modal Direct Phone Call Card */
+.gmb-phone-direct-card {
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 26px 22px;
+  box-shadow: 5px 5px 0 var(--ink);
+  text-align: center;
+  margin: 18px 0 14px;
+}
+.gmb-phone-direct-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid var(--ink);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.gmb-phone-direct-card h4 {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -.5px;
+  margin: 0 0 8px;
+}
+.gmb-phone-direct-card p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #3b2c52;
+  margin: 0 auto 18px;
+  max-width: 520px;
+}
+.gmb-modal-phone-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.gmb-modal-phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 12px 30px;
+  box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .18s cubic-bezier(0.16,1,0.3,1), box-shadow .18s;
+}
+.gmb-modal-phone-btn:hover {
+  transform: translate(-2px, -2px) scale(1.02);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.gmb-modal-phone-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.gmb-phone-direct-perks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #23113f26;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #3b2c52;
+}
+

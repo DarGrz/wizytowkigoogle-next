@@ -15,10 +15,7 @@ import {
   AlertTriangle,
   AlertCircle,
   CheckCircle2,
-  PhoneCall,
-  Mail,
-  Send,
-  FileCheck2,
+  Phone,
 } from 'lucide-react';
 import type { GmbLocation } from '@/app/api/gmb-search/route';
 import type { PlaceDetails } from '@/app/api/places-details/route';
@@ -35,16 +32,6 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
   const [selectedPlace, setSelectedPlace] = useState<PlaceDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Diagnostic & quick form states
-  const [selectedOffer, setSelectedOffer] = useState<'audit' | 'consultation'>('audit');
-  const [selectedService, setSelectedService] = useState<'usuwanie-opinii' | 'reset-wizytowki' | 'pozycjonowanie' | 'inne'>('usuwanie-opinii');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [note, setNote] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -68,14 +55,6 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
       setError(null);
       setIsSearching(false);
       setIsLoadingDetails(false);
-      setSelectedOffer('audit');
-      setSelectedService('usuwanie-opinii');
-      setPhone('');
-      setEmail('');
-      setNote('');
-      setIsSubmitting(false);
-      setSubmitSuccess(false);
-      setFormError(null);
     }
   }, [isOpen]);
 
@@ -128,8 +107,6 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
   const handleSelectPlace = useCallback(async (location: GmbLocation) => {
     setIsLoadingDetails(true);
     setError(null);
-    setSubmitSuccess(false);
-    setFormError(null);
 
     try {
       const res = await fetch(`/api/places-details?placeId=${encodeURIComponent(location.placeId)}`);
@@ -137,13 +114,6 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
       const data = await res.json();
       if (data.details) {
         setSelectedPlace(data.details);
-        // Pre-select service if rating is below 4.1
-        if (typeof data.details.rating === 'number' && data.details.rating < 4.1) {
-          setSelectedOffer('consultation');
-          setSelectedService('usuwanie-opinii');
-        } else {
-          setSelectedOffer('audit');
-        }
       } else {
         setSelectedPlace({
           id: location.placeId,
@@ -204,112 +174,6 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
   const isLowRating = Boolean(
     selectedPlace && typeof selectedPlace.rating === 'number' && selectedPlace.rating < 4.1
   );
-
-  // Handle quick inquiry submission
-  const handleQuickSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedPlace) return;
-
-    if (!phone.trim() && !email.trim()) {
-      setFormError('Proszę podać numer telefonu lub adres e-mail do kontaktu.');
-      return;
-    }
-
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setFormError('Proszę podać poprawny adres e-mail.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setFormError(null);
-
-    try {
-      const serviceName =
-        selectedOffer === 'audit'
-          ? 'Płatny audyt wizytówki Google (299 zł brutto)'
-          : selectedService === 'reset-wizytowki'
-          ? 'Resetowanie wizytówki Google (nowy profil)'
-          : selectedService === 'usuwanie-opinii'
-          ? 'Usuwanie negatywnych opinii Google'
-          : 'Konsultacja i optymalizacja profilu Google';
-
-      const diagnosticSummary = [
-        `Firma: ${selectedPlace.name}`,
-        `Adres: ${selectedPlace.address}`,
-        `Link: ${selectedPlace.googleMapsUrl}`,
-        selectedPlace.rating !== undefined
-          ? `Ocena: ${selectedPlace.rating.toFixed(1)} / 5.0 (${selectedPlace.user_ratings_total || 0} opinii)`
-          : 'Brak opinii',
-        missingFields.length > 0
-          ? `Wykryte braki (${missingFields.length}): ${missingFields.map((f) => f.label).join(', ')}`
-          : 'Podstawowe pola profilu kompletne',
-        `Wybrana oferta: ${serviceName}`,
-        note.trim() ? `Notatka od klienta: ${note.trim()}` : '',
-      ]
-        .filter(Boolean)
-        .join('\n');
-
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: `Właściciel: ${selectedPlace.name}`,
-          email: email.trim() || 'brak-email@wizytowkigoogle.pl',
-          phone: phone.trim() || 'Brak telefonu',
-          company: selectedPlace.name,
-          service: serviceName,
-          message: diagnosticSummary,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || 'Wystąpił błąd podczas wysyłania zapytania.');
-      }
-
-      setSubmitSuccess(true);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Nie udało się wysłać zapytania. Spróbuj ponownie.';
-      setFormError(msg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Apply to order form on page and close modal
-  const handleApplyToOrder = (place: PlaceDetails) => {
-    window.dispatchEvent(
-      new CustomEvent('set-order-business', {
-        detail: {
-          company: place.name,
-          profileUrl: place.googleMapsUrl,
-          website: place.website || '',
-        },
-      })
-    );
-
-    try {
-      sessionStorage.setItem(
-        'wg-selected-business',
-        JSON.stringify({
-          company: place.name,
-          profileUrl: place.googleMapsUrl,
-          website: place.website || '',
-        })
-      );
-    } catch {
-      // ignore
-    }
-
-    onClose();
-
-    const targetSection = document.getElementById('kontakt') || document.getElementById('zlecenie');
-    if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      window.location.href = '/#kontakt';
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -427,38 +291,14 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
                   </div>
                   <div className="gmb-hint-item">
                     <span className="gmb-hint-bullet">3</span>
-                    <p>Sprawdź ocenę, wykryj nieuzupełnione pola i zamów dedykowany audyt lub konsultację.</p>
+                    <p>Sprawdź ocenę, wykryj nieuzupełnione pola i skonsultuj profil bezpośrednio z naszym specjalistą.</p>
                   </div>
                 </div>
               )}
             </div>
           </div>
-        ) : submitSuccess ? (
-          /* Success Screen inside Modal */
-          <div className="gmb-modal-body">
-            <div className="gmb-success-card">
-              <div className="gmb-success-icon">
-                <CheckCircle2 size={32} />
-              </div>
-              <h3>Dziękujemy! Zgłoszenie zostało wysłane.</h3>
-              <div className="gmb-success-badge">
-                {selectedOffer === 'audit' ? 'Zamówienie: Audyt 299 zł brutto' : 'Zapytanie o wizytówkę Google'}
-              </div>
-              <p>
-                Otrzymaliśmy zapytanie dla firmy <strong>{selectedPlace.name}</strong>.
-                Nasz doradca przeanalizuje profil i skontaktuje się z Tobą w ciągu maksymalnie 24 godzin roboczych.
-              </p>
-              <button
-                type="button"
-                className="button dark"
-                onClick={onClose}
-              >
-                Zamknij okno
-              </button>
-            </div>
-          </div>
         ) : (
-          /* Diagnostic & Action View inside Modal */
+          /* Diagnostic & Direct Call View inside Modal */
           <div className="gmb-modal-body gmb-preview-body">
             {/* Top Business Card */}
             <div className="gmb-preview-card">
@@ -550,26 +390,12 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
                   </div>
                 </div>
                 <div className="gmb-alert-actions">
-                  <button
-                    type="button"
-                    className={`gmb-choice-pill ${selectedService === 'usuwanie-opinii' && selectedOffer === 'consultation' ? 'active' : ''}`}
-                    onClick={() => {
-                      setSelectedOffer('consultation');
-                      setSelectedService('usuwanie-opinii');
-                    }}
-                  >
-                    🛡️ Usuwanie negatywnych opinii
-                  </button>
-                  <button
-                    type="button"
-                    className={`gmb-choice-pill ${selectedService === 'reset-wizytowki' && selectedOffer === 'consultation' ? 'active' : ''}`}
-                    onClick={() => {
-                      setSelectedOffer('consultation');
-                      setSelectedService('reset-wizytowki');
-                    }}
-                  >
-                    🔄 Resetowanie wizytówki (czysty profil)
-                  </button>
+                  <a href="tel:+48527275002" className="gmb-choice-pill">
+                    🛡️ Usuwanie negatywnych opinii — zadzwoń
+                  </a>
+                  <a href="tel:+48527275002" className="gmb-choice-pill">
+                    🔄 Resetowanie wizytówki (czysty profil) — zadzwoń
+                  </a>
                 </div>
               </div>
             )}
@@ -603,152 +429,36 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
               </div>
             )}
 
-            {/* Condition 3: Choice of Offer including Paid Audit (299 zł brutto) */}
-            <div className="gmb-audit-options">
-              {/* Option A: Paid Audit 299 zł */}
-              <div
-                className={`gmb-audit-card featured ${selectedOffer === 'audit' ? 'selected' : ''}`}
-                onClick={() => setSelectedOffer('audit')}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') setSelectedOffer('audit');
-                }}
-              >
-                <div className="gmb-audit-badge">Polecana opcja</div>
-                <div className="gmb-audit-header">
-                  <h4>Kompleksowy Audyt Wizytówki Google</h4>
-                  <span className="gmb-audit-price">299 zł brutto</span>
-                </div>
-                <p className="gmb-audit-desc">
-                  Pełna analiza pozycji profilu w Twoim mieście (geosiatka lokalna), wykaz błędów technicznych, analiza TOP 3 konkurencji oraz gotowy plan optymalizacji w raporcie PDF.
-                </p>
-                <div className="gmb-audit-perks">
-                  <span>✓ Badanie pozycji na mapie miasta</span>
-                  <span>✓ Analiza słów kluczowych</span>
-                  <span>✓ Sprawdzenie konkurencji</span>
-                  <span>✓ Raport PDF + omówienie</span>
-                </div>
+            {/* Condition 3: Direct Phone Call CTA */}
+            <div className="gmb-phone-direct-card">
+              <div className="gmb-phone-direct-badge">
+                <Phone size={14} /> Bezpłatna konsultacja telefoniczna
               </div>
-
-              {/* Option B: Free consultation / Custom quote */}
-              <div
-                className={`gmb-audit-card ${selectedOffer === 'consultation' ? 'selected' : ''}`}
-                onClick={() => setSelectedOffer('consultation')}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') setSelectedOffer('consultation');
-                }}
-              >
-                <div className="gmb-audit-header">
-                  <h4>Bezpłatna konsultacja i wycena</h4>
-                  <span className="gmb-audit-price" style={{ background: '#e2f7ed', color: '#166534' }}>0 zł</span>
-                </div>
-                <p className="gmb-audit-desc">
-                  Wstępna bezpłatna weryfikacja możliwości usunięcia opinii, pozycjonowania, odwieszenia lub resetowania wizytówki.
-                </p>
+              <h4>Zadzwoń i omów swoją wizytówkę</h4>
+              <p>
+                Nasz doradca bezpłatnie przeanalizuje profil Twojej firmy, omówi wykryte braki i podpowie jak poprawić pozycję lub usunąć niechciane opinie.
+              </p>
+              <div className="gmb-modal-phone-wrap">
+                <a
+                  href="tel:+48527275002"
+                  className="gmb-modal-phone-btn"
+                  aria-label="Zadzwoń do specjalisty: 527 275 002"
+                >
+                  <span className="phone-pulse-icon">
+                    <Phone size={24} />
+                  </span>
+                  <div className="phone-badge-text">
+                    <small>Kliknij i połącz się</small>
+                    <strong>527 275 002</strong>
+                  </div>
+                </a>
+              </div>
+              <div className="gmb-phone-direct-perks">
+                <span>✓ Bezpłatna wstępna analiza profilu</span>
+                <span>✓ Porady dostosowane do Twojej branży</span>
+                <span>✓ Bez zobowiązań i bez formularzy</span>
               </div>
             </div>
-
-            {/* Condition 4 & 5: Simple Inline Contact Form inside Modal */}
-            <form className="gmb-quick-form" onSubmit={handleQuickSubmit}>
-              <h4>
-                <Send size={16} />
-                <span>
-                  {selectedOffer === 'audit'
-                    ? 'Zamówienie audytu wizytówki (299 zł brutto)'
-                    : 'Wyślij szybkie zapytanie o wizytówkę'}
-                </span>
-              </h4>
-              <p>Podaj numer telefonu i adres e-mail — nasz specjalista skontaktuje się z Tobą bezpośrednio.</p>
-
-              {formError && (
-                <div className="error" style={{ margin: '4px 0', padding: '8px 12px', fontSize: '12px' }}>
-                  {formError}
-                </div>
-              )}
-
-              <div className="gmb-form-fields">
-                <div className="gmb-form-field">
-                  <label htmlFor="gmb-phone">
-                    <PhoneCall size={12} style={{ display: 'inline', marginRight: 4 }} />
-                    Numer telefonu *
-                  </label>
-                  <input
-                    id="gmb-phone"
-                    type="tel"
-                    required
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="np. 527 275 002"
-                  />
-                </div>
-
-                <div className="gmb-form-field">
-                  <label htmlFor="gmb-email">
-                    <Mail size={12} style={{ display: 'inline', marginRight: 4 }} />
-                    Adres e-mail *
-                  </label>
-                  <input
-                    id="gmb-email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="twoj@email.pl"
-                  />
-                </div>
-
-                <div className="gmb-form-field full-width">
-                  <label htmlFor="gmb-note">Dodatkowe uwagi / pytania (opcjonalnie)</label>
-                  <textarea
-                    id="gmb-note"
-                    rows={2}
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    placeholder={
-                      selectedOffer === 'audit'
-                        ? 'Wpisz np. główne usługi lub frazy, na których najbardziej Ci zależy...'
-                        : 'Opisz krótko swój problem z wizytówką lub opiniami...'
-                    }
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="gmb-submit-btn"
-              >
-                {isSubmitting ? (
-                  <>
-                    <LoaderCircle className="spin" size={18} />
-                    <span>Wysyłanie zgłoszenia...</span>
-                  </>
-                ) : selectedOffer === 'audit' ? (
-                  <>
-                    <FileCheck2 size={18} />
-                    <span>Zamawiam audyt za 299 zł brutto</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={16} />
-                    <span>Wyślij bezpłatne zapytanie</span>
-                  </>
-                )}
-              </button>
-
-              <div className="gmb-form-secondary-action">
-                <button
-                  type="button"
-                  className="gmb-scroll-link"
-                  onClick={() => handleApplyToOrder(selectedPlace)}
-                >
-                  Wolisz pełny formularz na stronie? Przejdź do formularza na dole strony ↓
-                </button>
-              </div>
-            </form>
 
             {/* Back button to search another business */}
             <button
@@ -757,8 +467,6 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
               onClick={() => {
                 setSelectedPlace(null);
                 setError(null);
-                setSubmitSuccess(false);
-                setFormError(null);
                 setTimeout(() => inputRef.current?.focus(), 50);
               }}
             >

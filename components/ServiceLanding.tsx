@@ -1,11 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Check, ShieldCheck, MessageSquare, MapPin } from 'lucide-react';
+import { ArrowUpRight, Check, ShieldCheck, MessageSquare, MapPin, Phone } from 'lucide-react';
 import type { ContentPage } from '@/lib/types';
 import { landingFor } from '@/lib/service-landings';
-import { hasDatabase } from '@/lib/db';
-import ReputationOrder from './ReputationOrder';
-import OrderSection from './OrderSection';
 import '../app/service-landing.css';
 import aleoHero from '@/public/images/usuwanie-aleo.webp';
 import firmHero from '@/public/images/usuwanie-firmy-z-google.webp';
@@ -61,7 +58,16 @@ export default function ServiceLanding({ page, landing, pages }: {
         <span className="pill">{support ? <MapPin size={16} /> : <ShieldCheck size={16} />}{page.eyebrow}</span>
         <h1>{page.title}</h1>
         <p className="sl-intro">{page.intro}</p>
-        <div className="sl-actions"><a className="button dark" href="#zlecenie">{landing.cta}<ArrowUpRight size={21} /></a><a href="#zakres" className="text-link">Poznaj zakres usługi</a></div>
+        <div className="sl-actions">
+          <a href="tel:+48527275002" className="sl-hero-phone-badge" aria-label="Zadzwoń: 527 275 002">
+            <span className="sl-phone-icon"><Phone size={22} /></span>
+            <span className="sl-phone-info">
+              <small>Zadzwoń i zapytaj</small>
+              <strong>527 275 002</strong>
+            </span>
+          </a>
+          <a href="#zakres" className="text-link">Poznaj zakres usługi</a>
+        </div>
         <p className="sl-reassurance"><Check size={17} />{support ? 'Zakres i wycena ustalane przed startem.' : reviews ? 'Bezpłatna weryfikacja i wycena przed startem.' : 'Zakres i wycena widoczne przed decyzją.'}</p>
       </div>
       <div className="sl-art">
@@ -79,14 +85,48 @@ export default function ServiceLanding({ page, landing, pages }: {
       <div className="sl-articles">{page.sections.map((section, index) => <article key={index}><span className="sl-number">{String(index + 1).padStart(2, '0')}</span><h2>{section.title}</h2><p>{section.text}</p></article>)}</div>
     </section>
     <section className="wrap sl-process" aria-labelledby="sl-process-title">
-      <div><p className="eyebrow">Bez zbędnego komplikowania</p><h2 id="sl-process-title">Od problemu<br />do obsługi sprawy.</h2><a href="#zlecenie" className="button dark">{landing.cta}<ArrowUpRight size={20} /></a></div>
+      <div>
+        <p className="eyebrow">Bez zbędnego komplikowania</p>
+        <h2 id="sl-process-title">Od problemu<br />do obsługi sprawy.</h2>
+        <a href="tel:+48527275002" className="sl-hero-phone-badge small-badge" aria-label="Zadzwoń: 527 275 002">
+          <span className="sl-phone-icon"><Phone size={18} /></span>
+          <span className="sl-phone-info">
+            <small>Zadzwoń i zapytaj</small>
+            <strong>527 275 002</strong>
+          </span>
+        </a>
+      </div>
       <ol>{[
-        ['Wskazujesz firmę i zakres', portal ? 'Zacznij od NIP. Po weryfikacji wybierzesz portale i zobaczysz ich ceny.' : 'Znajdź firmę lub wskaż profil i opisz, co wymaga naszej uwagi.'],
-        ['Poznajesz warunki', reviews ? 'Potwierdzamy zakres i indywidualną wycenę przed rozpoczęciem pracy.' : support ? 'Ustalamy zakres pomocy i cenę przed rozpoczęciem współpracy.' : 'Sprawdzasz podsumowanie i cenę. Zgłoszenie przesyłasz bez opłaty na start — wkrótce skontaktuje się z Tobą przydzielony opiekun.'],
+        ['Dzwonisz do nas', 'Przedstawiasz nazwę firmy lub NIP. Podczas rozmowy sprawdzamy profil w Google Maps lub portalu.'],
+        ['Poznajesz warunki', reviews ? 'Potwierdzamy zakres i indywidualną wycenę przed rozpoczęciem pracy.' : support ? 'Ustalamy zakres pomocy i wycenę przed rozpoczęciem współpracy.' : 'Ustalamy zakres i plan działania bez opłaty na start.'],
         ['Realizacja zgłoszenia', 'Przystępujemy do formalnych działań i kontaktu z portalem. O wyniku informujemy bezpośrednio po zakończeniu prac.'],
       ].map(([title, text], index) => <li key={title}><span>{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol>
     </section>
-    {support ? <OrderSection service={page.service} /> : <ReputationOrder enabled={hasDatabase()} initialSelection={landing.selection} />}
+    <section className="wrap sl-phone-section" id="kontakt">
+      <span id="zlecenie" style={{ position: 'relative', top: '-90px', display: 'block', visibility: 'hidden' }} />
+      <div className="sl-phone-card">
+        <div className="sl-phone-header">
+          <span className="pill mint"><Phone size={14} /> Bezpośredni kontakt telefoniczny</span>
+          <h2>Zadzwoń i skonsultuj sprawę swojej firmy</h2>
+          <p>Nie musisz wypełniać formularzy. Podczas krótkiej rozmowy telefonicznej bezpłatnie przeanalizujemy sytuację profilu i odpowiemy na wszystkie pytania.</p>
+        </div>
+        <div className="sl-phone-badge-wrapper">
+          <a href="tel:+48527275002" className="sl-big-phone-btn" aria-label="Zadzwoń do nas: 527 275 002">
+            <Phone size={26} />
+            <span className="sl-big-phone-number">527 275 002</span>
+          </a>
+          <span className="sl-phone-sub">Zadzwoń teraz • Szybka, bezpłatna konsultacja profilu</span>
+        </div>
+        <div className="sl-phone-features">
+          <span>✓ Bezpłatna wstępna analiza profilu</span>
+          <span>✓ Konkretne ustalenia podczas rozmowy</span>
+          <span>✓ Pełna poufność i jasne zasady</span>
+        </div>
+        <div className="sl-phone-alt">
+          <span>Wolisz napisać? Wyślij wiadomość na adres: <a href="mailto:kontakt@wizytowkigoogle.pl">kontakt@wizytowkigoogle.pl</a></span>
+        </div>
+      </div>
+    </section>
     <section className="wrap faq-section sl-faq"><p className="eyebrow">Przed podjęciem decyzji</p><h2>Pytania o {reviews ? 'usuwanie opinii' : support ? 'obsługę wizytówki' : 'usuwanie profilu'}.</h2>{page.faq.map((faq, index) => <details className="faq" key={index}><summary>{faq.question}<span>+</span></summary><p>{faq.answer}</p></details>)}</section>
     <section className="wrap sl-related"><p className="eyebrow">Dopasuj usługę do problemu</p><h2>Sprawdź także.</h2><div>{related.map(other => <Link key={other.slug} href={`/${other.slug}`}><MessageSquare size={23} /><h3>{other.eyebrow}</h3><span>Poznaj zakres <ArrowUpRight size={18} /></span></Link>)}</div><Link className="text-link" href="/ochrona-wizerunku.html">Wszystkie usługi ochrony wizerunku <ArrowUpRight size={18} /></Link></section>
   </main>;

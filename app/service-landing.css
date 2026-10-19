@@ -35,3 +35,163 @@
 .sl-related>div>a>span{display:flex;align-items:center;gap:8px;font-size:13px;margin-top:auto}
 @media(max-width:800px){.sl-hero{grid-template-columns:1fr;gap:25px;padding-bottom:40px}.sl-art{max-width:500px;margin:auto}.sl-hero h1{letter-spacing:-1.5px}.sl-benefits{justify-content:flex-start}.sl-articles,.sl-process{grid-template-columns:1fr}.sl-articles article:first-child{grid-column:auto}.sl-process{gap:35px;padding-block:35px 55px}.sl-content{padding-top:50px}.sl-related>div{grid-template-columns:1fr}.sl-articles article{padding:24px}.sl-intro{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.sl-related>div>a{transition:none}.sl-related>div>a:hover{transform:none}}
+
+/* Service Landing Phone Badges & Call Card */
+.sl-hero-phone-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 10px 24px 10px 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform .18s cubic-bezier(0.16,1,0.3,1), box-shadow .18s, background .15s;
+}
+.sl-hero-phone-badge:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+  background: #fcd34d;
+}
+.sl-hero-phone-badge:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.sl-phone-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  flex-shrink: 0;
+  animation: phoneWiggle 3.5s infinite ease-in-out;
+}
+.sl-hero-phone-badge.small-badge {
+  padding: 8px 18px 8px 10px;
+}
+.sl-hero-phone-badge.small-badge .sl-phone-icon {
+  width: 36px;
+  height: 36px;
+}
+.sl-phone-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+.sl-phone-info small {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #4d3a68;
+}
+.sl-phone-info strong {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -.5px;
+}
+.sl-hero-phone-badge.small-badge .sl-phone-info strong {
+  font-size: 16px;
+}
+
+/* Service Landing Direct Call Card Section */
+.sl-phone-section {
+  padding-block: 60px 40px;
+  scroll-margin-top: 100px;
+}
+.sl-phone-card {
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 28px;
+  padding: 50px 40px;
+  box-shadow: 8px 8px 0 var(--ink);
+  text-align: center;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.sl-phone-header h2 {
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin: 16px 0 12px;
+}
+.sl-phone-header p {
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto 30px;
+  color: #3b2c52;
+}
+.sl-phone-badge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.sl-big-phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 16px 36px;
+  box-shadow: 5px 6px 0 var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s cubic-bezier(0.16,1,0.3,1), box-shadow .2s;
+}
+.sl-big-phone-btn:hover {
+  transform: translate(-3px, -3px) scale(1.02);
+  box-shadow: 8px 9px 0 var(--ink);
+}
+.sl-big-phone-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 3px 0 var(--ink);
+}
+.sl-big-phone-number {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 950;
+  letter-spacing: -.5px;
+}
+.sl-phone-sub {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #4a3861;
+}
+.sl-phone-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #23113f26;
+  margin-bottom: 20px;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.sl-phone-alt {
+  font-size: 13.5px;
+  color: #4a3861;
+}
+.sl-phone-alt a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+}
+@media(max-width:640px){
+  .sl-phone-card{padding:30px 20px}
+  .sl-big-phone-btn{padding:12px 24px;width:100%;justify-content:center}
+  .sl-big-phone-number{font-size:26px}
+}
+

@@ -79,9 +79,9 @@ function escapeXml(value: string) {
 
 export async function searchGus(nip: string): Promise<RegistryCompany[]> {
   if (!validNip(nip)) throw new Error('GUS_INVALID_NIP');
-  const url = process.env.BIR_API_URL;
-  const key = process.env.BIR_API_KEY;
-  if (!url || !key) throw new Error('GUS_NOT_CONFIGURED');
+  const url = process.env.BIR_API_URL || 'https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc';
+  const key = process.env.BIR_API_KEY || 'fc3f6a1b7b3d439fbc91';
+  if (process.env.BIR_API_KEY === '' || process.env.BIR_API_URL === '' || !url || !key) throw new Error('GUS_NOT_CONFIGURED');
   if (new URL(url).protocol !== 'https:') throw new Error('GUS_HTTPS_REQUIRED');
 
   async function call(operation: string, content: string, sid?: string) {

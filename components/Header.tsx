@@ -103,30 +103,18 @@ export default function Header() {
             <button
               type="button"
               className="header-search-btn"
-              onClick={(event) => {
+              onClick={() => {
                 setOpen(false);
-                if (reputation) window.dispatchEvent(new CustomEvent('open-reputation-order', { detail: event.currentTarget }));
-                else setSearchOpen(true);
+                setSearchOpen(true);
               }}
-              aria-label={reputation ? 'Otwórz zgłoszenie ochrony wizerunku' : 'Sprawdź swoją wizytówkę w Google'}
+              aria-label="Sprawdź swoją wizytówkę w Google"
             >
               <Search size={16} />
-              <span>{reputation ? 'Zgłoś sprawę' : 'Sprawdź wizytówkę'}</span>
+              <span>Sprawdź wizytówkę</span>
             </button>
 
-            <Link className="button dark small" onClick={(event) => {
-              setOpen(false);
-              if (reputation) {
-                event.preventDefault();
-                window.dispatchEvent(new CustomEvent('open-reputation-order', { detail: event.currentTarget }));
-              }
-            }} href={reputation ? '#zlecenie' : '/#kontakt'}>
-              Napisz do nas <ArrowUpRight size={18} />
-            </Link>
-
-            <a href="tel:+48527275002" className="nav-menu-phone" onClick={() => setOpen(false)}>
-              <Phone size={15} />
-              <span>+48 527 275 002</span>
+            <a href="tel:+48527275002" className="button dark small header-phone-cta" onClick={() => setOpen(false)}>
+              <Phone size={15} style={{ marginRight: '6px' }} /> 527 275 002
             </a>
           </nav>
 

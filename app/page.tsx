@@ -84,14 +84,17 @@ export default async function Home() {
 
           <div className="hero-actions">
             <div className="hero-main-cta">
-              <a href="tel:+48527275002" className="hero-phone-btn" aria-label="Zadzwoń: +48 527 275 002">
-                <Phone size={15} />
-                <span>
-                  Zadzwoń: <strong>+48 527 275 002</strong>
+              <a href="tel:+48527275002" className="hero-phone-badge-large" aria-label="Zadzwoń: 527 275 002">
+                <span className="hero-phone-badge-icon">
+                  <Phone size={22} />
+                </span>
+                <span className="hero-phone-badge-content">
+                  <small>Zadzwoń i zapytaj</small>
+                  <strong>527 275 002</strong>
                 </span>
               </a>
               <a className="button primary hero-check-btn" data-open-gmb-search href="#kontakt">
-                Sprawdź swoją wizytówkę <ArrowUpRight size={23} />
+                Sprawdź swoją wizytówkę <ArrowUpRight size={22} />
               </a>
             </div>
             <a className="text-link" href="#jak-to-dziala">

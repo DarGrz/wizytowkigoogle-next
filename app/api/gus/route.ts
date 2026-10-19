@@ -20,7 +20,9 @@ export async function POST(request: Request) {
   }
   const parsed = schema.safeParse(input);
   if (!parsed.success) return Response.json({ error: 'Podaj poprawny, 10-cyfrowy NIP firmy.' }, { status: 400 });
-  if (!process.env.BIR_API_KEY || !process.env.BIR_API_URL) {
+  const birUrl = process.env.BIR_API_URL || 'https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc';
+  const birKey = process.env.BIR_API_KEY || 'fc3f6a1b7b3d439fbc91';
+  if (process.env.BIR_API_KEY === '' || process.env.BIR_API_URL === '' || !birUrl || !birKey) {
     console.error('GUS_NOT_CONFIGURED');
     return Response.json({ error: 'Wyszukiwarka GUS jest chwilowo niedostępna. Wpisz dane firmy ręcznie.' }, { status: 503 });
   }
