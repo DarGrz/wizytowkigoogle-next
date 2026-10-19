@@ -31,10 +31,10 @@ export default function ReputationOrder({ enabled, initialSelection }: { enabled
   const businessStep = source === 'portals' ? portalProfile ? 3 : 4 : 3;
   const contactStep = source === 'portals' ? portalProfile ? 4 : 5 : 4;
   const stageTitles = source === 'google'
-    ? [...sourceTitles, 'Znajdź swoją firmę.', 'Dane kontaktowe i płatność']
+    ? [...sourceTitles, 'Znajdź swoją firmę.', 'Dane kontaktowe i potwierdzenie']
     : portalProfile
-      ? [...sourceTitles, 'Podaj NIP i wybierz portale', 'Dane kontaktowe i płatność']
-      : [...sourceTitles, 'Wybierz portal', 'Znajdź swoją firmę.', 'Dane kontaktowe i płatność'];
+      ? [...sourceTitles, 'Podaj NIP i wybierz portale', 'Dane kontaktowe i potwierdzenie']
+      : [...sourceTitles, 'Wybierz portal', 'Znajdź swoją firmę.', 'Dane kontaktowe i potwierdzenie'];
   const activeStep = step;
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function ReputationOrder({ enabled, initialSelection }: { enabled
         ? 'Wycena po bezpłatnej analizie. Warunki współpracy potwierdzamy przed rozpoczęciem.'
         : `${formatPln(quote.netCents)} netto (${formatPln(quote.totalCents)} brutto) za skuteczne usunięcie opinii. Warunki potwierdzamy przed realizacją.`;
     }
-    return `${formatPln(quote.netCents)} netto · ${formatPln(quote.totalCents)} brutto. Płatność PayU teraz, przed rozpoczęciem realizacji.`;
+    return `${formatPln(quote.netCents)} netto · ${formatPln(quote.totalCents)} brutto. Zgłoszenie bez opłaty na start — wkrótce skontaktuje się z Tobą przydzielony opiekun.`;
   }
 
   return <>

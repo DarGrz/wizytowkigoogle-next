@@ -1,9 +1,9 @@
 import { randomUUID, createHmac } from 'node:crypto';
+import nodemailer from 'nodemailer';
 import { pool, hasDatabase, rows } from '@/lib/db';
 import { orderSchema } from '@/lib/validation';
 import { body, fail } from '@/lib/http';
-import { sameOrigin, ipHash, rateLimit, sha, trustedClientIp } from '@/lib/security';
-import { hasPayuConfiguration, createPayuPayment, priceDescription } from '@/lib/payu';
+import { sameOrigin, ipHash, rateLimit, sha } from '@/lib/security';
 import { isOutcomeService, reputationPortalsQuote, type ReviewPortal, type ReputationTarget } from '@/lib/reputation-pricing';
 import { isEligiblePortalProfileCompany } from '@/lib/company';
 import { searchGus } from '@/lib/gus';
@@ -68,14 +68,7 @@ export async function POST(req: Request) {
     const quote = isReputation
       ? reputationPortalsQuote(d.target as ReputationTarget, (d.portals?.length ? d.portals : [d.portal]) as ReviewPortal[])
       : null;
-    const requiresPayment = Boolean(isReputation && d.target === 'profile');
-    if (requiresPayment && !hasPayuConfiguration()) {
-      return Response.json({ error: 'Płatności PayU nie są jeszcze skonfigurowane. Zgłoszenie nie zostało zapisane.' }, { status: 503 });
-    }
-    const customerIp = requiresPayment ? trustedClientIp(req) : null;
-    if (requiresPayment && !customerIp) {
-      return Response.json({ error: 'Płatność wymaga zaufanego reverse proxy przekazującego adres klienta. Zgłoszenie nie zostało zapisane.' }, { status: 503 });
-    }
+    const requiresPayment = false; // Na razie nie podpinamy płatności za profile (ani Mapy Google, ani portale)
 
     const id = randomUUID();
     const reference = 'WG-' + new Date().toISOString().slice(0, 10).replaceAll('-', '') + '-' + id.slice(0, 8).toUpperCase();
@@ -86,71 +79,55 @@ export async function POST(req: Request) {
       const [prices] = await conn.execute('SELECT price_cents FROM services WHERE id=?', [d.service]);
       const catalogPrice = (prices as { price_cents: number | null }[])[0]?.price_cents ?? null;
       const price = quote ? quote.totalCents : catalogPrice;
-      const paymentStatus = requiresPayment ? 'creating' : outcome ? 'after_result' : 'not_required';
+      const paymentStatus = outcome ? 'after_result' : 'not_required';
       const attr = d.analyticsConsent ? JSON.stringify(d.attribution || {}) : null;
       await conn.execute(
         'INSERT INTO orders(id,reference,request_id,token_hash,service_id,company,email,phone,profile_url,keywords,description,billing_name,billing_nip,billing_address,price_cents,payment_status,attribution,ip_hash,raw_ip,user_agent,privacy_version,analytics_consent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         [id, reference, d.requestId, sha(accessToken), d.service, d.company, d.email, d.phone, d.profileUrl, d.keywords, d.description, d.billingDetails?.name || null, d.billingDetails?.nip || null, d.billingDetails?.address || null, price, paymentStatus, attr, ip.hash, ip.raw, d.analyticsConsent ? (req.headers.get('user-agent') || '').slice(0, 512) : null, '2026-10-v1', d.analyticsConsent]
       );
       await conn.execute('INSERT INTO order_history(order_id,status,message,actor) VALUES (?,?,?,?)', [
-        id, 'nowe', requiresPayment ? 'Zgłoszenie zapisane. Przygotowujemy bezpieczną płatność PayU.' : outcome ? 'Zgłoszenie zapisane. Rozliczenie nastąpi po osiągnięciu rezultatu.' : 'Zgłoszenie zapisane. Oczekuje na weryfikację.', 'system'
+        id, 'nowe', 'Zgłoszenie zapisane. Wkrótce skontaktuje się z Tobą przydzielony opiekun.', 'system'
       ]);
-      if (!requiresPayment) {
-        const text = outcome
-          ? `Dziękujemy za zgłoszenie ${reference}.\n\nZa usunięcie opinii rozliczamy się dopiero po osiągnięciu uzgodnionego rezultatu. Nie pobraliśmy płatności przy zgłoszeniu.\n\nStatus: ${statusLink}\nZachowaj ten link dla siebie.\n\nwizytowkigoogle.pl`
-          : `Dziękujemy za zgłoszenie ${reference}.\n\nSprawdzimy możliwość realizacji i potwierdzimy warunki przed rozpoczęciem. Wysłanie formularza nie powoduje pobrania płatności.\n\nStatus: ${statusLink}\nZachowaj ten link dla siebie.\n\nwizytowkigoogle.pl`;
-        await conn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [randomUUID(), d.email, `Przyjęliśmy zgłoszenie ${reference}`, text]);
-        if (process.env.ADMIN_NOTIFY_EMAIL) {
-          await conn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [randomUUID(), process.env.ADMIN_NOTIFY_EMAIL, `Nowe zgłoszenie ${reference}`, `Nowe zgłoszenie: ${d.company}. Szczegóły w panelu /admin.`]);
-        }
+
+      const clientEmailText = `Dzień dobry,\n\nDziękujemy za złożenie zamówienia ${reference} dla firmy ${d.company}.\n\nUsługa: ${quote?.serviceName || d.service}\n\nWkrótce skontaktuje się z Tobą przydzielony opiekun, aby omówić szczegóły i potwierdzić realizację.\n\nwizytowkigoogle.pl\ntel. 527 275 002`;
+
+      await conn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [randomUUID(), d.email, `Przyjęliśmy zgłoszenie ${reference}`, clientEmailText]);
+      if (process.env.ADMIN_NOTIFY_EMAIL) {
+        await conn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [randomUUID(), process.env.ADMIN_NOTIFY_EMAIL, `Nowe zgłoszenie ${reference}`, `Nowe zgłoszenie: ${d.company}.\nUsługa: ${quote?.serviceName || d.service}\nKlient: ${d.email}, tel: ${d.phone}\nSzczegóły w panelu /admin.`]);
       }
+
       await conn.commit();
+
+      // Direct email via LH SMTP
+      try {
+        const host = process.env.SMTP_HOST || 'mail-serwer217040.lh.pl';
+        const port = Number(process.env.SMTP_PORT || 465);
+        const user = process.env.SMTP_USER || 'kontakt@wizytowkigoogle.pl';
+        const pass = process.env.SMTP_PASS || 'Anakonda22!';
+        const transporter = nodemailer.createTransport({ host, port, secure: port === 465, auth: { user, pass } });
+
+        await transporter.sendMail({
+          from: '"wizytowkigoogle.pl" <kontakt@wizytowkigoogle.pl>',
+          to: d.email,
+          subject: `Przyjęliśmy zgłoszenie ${reference} — wizytowkigoogle.pl`,
+          text: clientEmailText,
+        });
+
+        await transporter.sendMail({
+          from: '"Nowe Zgłoszenie" <kontakt@wizytowkigoogle.pl>',
+          to: 'kontakt@wizytowkigoogle.pl',
+          replyTo: d.email,
+          subject: `Nowe zgłoszenie ${reference} — ${d.company}`,
+          text: `Nowe zgłoszenie ${reference}\nFirma: ${d.company}\nUsługa: ${quote?.serviceName || d.service}\nTelefon: ${d.phone}\nEmail: ${d.email}\nProfil URL: ${d.profileUrl || 'brak'}\nOpis: ${d.description || 'brak'}\n\nWkrótce skontaktuje się z klientem przydzielony opiekun.`,
+        });
+      } catch (mailError) {
+        console.error('Direct mail delivery notification error:', mailError);
+      }
     } catch (error) {
       await conn.rollback();
       throw error;
     } finally {
       conn.release();
-    }
-
-    if (requiresPayment && quote?.kind === 'payu') {
-      try {
-        const payment = await createPayuPayment({
-          reference,
-          description: quote.serviceName,
-          totalCents: quote.totalCents,
-          email: d.email,
-          phone: d.phone,
-          company: d.company,
-          accessToken,
-          customerIp: customerIp!,
-        });
-        const paymentConn = await pool().getConnection();
-        try {
-          await paymentConn.beginTransaction();
-          await paymentConn.execute(
-            'UPDATE orders SET payment_status=?,payment_provider_order_id=?,payment_redirect_url=? WHERE id=? AND payment_status=?',
-            ['pending', payment.orderId, payment.redirectUri, id, 'creating']
-          );
-          await paymentConn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [
-            randomUUID(), d.email, `Płatność za zgłoszenie ${reference}`,
-            `Dziękujemy za zgłoszenie ${reference}.\n\nUsługa: ${quote.serviceName}\nCena: ${priceDescription(quote.netCents, quote.totalCents)}\n\nDokończ płatność w PayU: ${payment.redirectUri}\nStatus sprawy: ${statusLink}\n\nwizytowkigoogle.pl`
-          ]);
-          if (process.env.ADMIN_NOTIFY_EMAIL) {
-            await paymentConn.execute('INSERT INTO mail_outbox(id,recipient,subject,body) VALUES (?,?,?,?)', [randomUUID(), process.env.ADMIN_NOTIFY_EMAIL, `Nowe zgłoszenie ${reference}`, `Nowe zgłoszenie: ${d.company}. Oczekuje na płatność PayU. Szczegóły w panelu /admin.`]);
-          }
-          await paymentConn.commit();
-        } catch (error) {
-          await paymentConn.rollback();
-          throw error;
-        } finally {
-          paymentConn.release();
-        }
-        return Response.json({ reference, accessToken, checkoutUrl: payment.redirectUri }, { status: 201 });
-      } catch (error) {
-        console.error(error instanceof Error ? error.message : 'PayU payment creation failed');
-        await pool().execute('UPDATE orders SET payment_status=? WHERE id=? AND payment_status=?', ['failed', id, 'creating']);
-        return Response.json({ error: `Zgłoszenie ${reference} zapisano, ale nie udało się potwierdzić utworzenia płatności. Skontaktuj się z nami, podając numer sprawy.` }, { status: 502 });
-      }
     }
 
     return Response.json({ reference, accessToken }, { status: 201 });

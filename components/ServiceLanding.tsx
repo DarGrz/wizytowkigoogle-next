@@ -82,7 +82,7 @@ export default function ServiceLanding({ page, landing, pages }: {
       <div><p className="eyebrow">Bez zbędnego komplikowania</p><h2 id="sl-process-title">Od problemu<br />do obsługi sprawy.</h2><a href="#zlecenie" className="button dark">{landing.cta}<ArrowUpRight size={20} /></a></div>
       <ol>{[
         ['Wskazujesz firmę i zakres', portal ? 'Zacznij od NIP. Po weryfikacji wybierzesz portale i zobaczysz ich ceny.' : 'Znajdź firmę lub wskaż profil i opisz, co wymaga naszej uwagi.'],
-        ['Poznajesz warunki', reviews ? 'Potwierdzamy zakres i indywidualną wycenę przed rozpoczęciem pracy.' : support ? 'Ustalamy zakres pomocy i cenę przed rozpoczęciem współpracy.' : 'Sprawdzasz podsumowanie i cenę. Płatność za profil odbywa się przez PayU w formularzu.'],
+        ['Poznajesz warunki', reviews ? 'Potwierdzamy zakres i indywidualną wycenę przed rozpoczęciem pracy.' : support ? 'Ustalamy zakres pomocy i cenę przed rozpoczęciem współpracy.' : 'Sprawdzasz podsumowanie i cenę. Zgłoszenie przesyłasz bez opłaty na start — wkrótce skontaktuje się z Tobą przydzielony opiekun.'],
         ['Realizacja zgłoszenia', 'Przystępujemy do formalnych działań i kontaktu z portalem. O wyniku informujemy bezpośrednio po zakończeniu prac.'],
       ].map(([title, text], index) => <li key={title}><span>{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol>
     </section>

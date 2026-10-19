@@ -147,24 +147,14 @@ export default function OrderForm({ service = '', enabled = true, context = 'goo
         <span className="success-icon">
           <Check size={40} />
         </span>
-        <p className="eyebrow">Dobry początek!</p>
-        <h3>
-          Dziękujemy.
-          <br />
-          Zgłoszenie przyjęte!
-        </h3>
-        <p>Numer Twojej sprawy</p>
+        <p className="eyebrow">Dziękujemy za zgłoszenie!</p>
+        <h3>Zgłoszenie przyjęte</h3>
+        <p>Numer Twojej sprawy:</p>
         <strong className="reference">{result.reference}</strong>
-        {result.checkoutUrl
-          ? <p>Przechodzimy do bezpiecznej płatności PayU. Jeśli przekierowanie nie nastąpi, użyj przycisku poniżej.</p>
-          : result.paymentStatus === 'paid'
-            ? <p>Płatność została już potwierdzona. Sprawdź szczegóły sprawy pod bezpiecznym linkiem poniżej.</p>
-            : <p>Sprawdzimy możliwość realizacji i skontaktujemy się z gotową analizą Twojej sprawy.</p>}
-        {result.checkoutUrl && <a className="button dark" href={result.checkoutUrl}>Przejdź do płatności <ArrowUpRight size={20} /></a>}
-        <a className="button dark" href={'/status#' + result.accessToken}>
-          Sprawdź status <ArrowUpRight size={20} />
-        </a>
-        <small>Zapisz bezpieczny link do statusu. Potwierdzenie e-mail jest w kolejce do wysłania.</small>
+        <p style={{ marginTop: '14px', fontSize: '15px', lineHeight: '1.5' }}>
+          Wkrótce skontaktuje się z Tobą przydzielony opiekun, aby omówić szczegóły i potwierdzić realizację.
+        </p>
+        <small style={{ marginTop: '14px', display: 'block' }}>Potwierdzenie wysłaliśmy także na Twój adres e-mail.</small>
       </div>
     );
   }
@@ -380,13 +370,13 @@ export default function OrderForm({ service = '', enabled = true, context = 'goo
           </>
         ) : (
           <>
-            {preset?.target === 'profile' ? 'Zgłoś i przejdź do PayU' : 'Wyślij zgłoszenie'} <ArrowUpRight size={22} />
+            Wyślij zgłoszenie <ArrowUpRight size={22} />
           </>
         )}
       </button>
 
       <small className="form-safety">
-        <ShieldCheck size={16} /> {preset?.target === 'profile' ? 'Płatność za profil przez PayU przy składaniu zgłoszenia.' : 'Zakres i warunki współpracy ustalamy przed rozpoczęciem.'}
+        <ShieldCheck size={16} /> Zakres i warunki współpracy potwierdzamy przed rozpoczęciem. Wkrótce skontaktuje się z Tobą przydzielony opiekun.
       </small>
     </form>
   );
