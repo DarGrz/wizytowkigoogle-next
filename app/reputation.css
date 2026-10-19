@@ -172,3 +172,135 @@
   .rep-service:hover{transform:none}
   .rep-dialog[open]{animation:none}.rep-choice{transition:none}.rep-choice:hover{transform:none}
 }
+
+/* Tab switcher in Reputation Dialog */
+.rep-tab-switch {
+  display: flex;
+  background: #f1ecf7;
+  padding: 5px;
+  border-radius: 14px;
+  border: 1.5px solid var(--ink);
+  gap: 6px;
+  margin: 18px 0 22px;
+}
+.rep-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 750;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .18s;
+}
+.rep-tab-btn:hover {
+  color: var(--ink);
+}
+.rep-tab-btn.active {
+  background: #ffffff;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* NIP Registry Card & Smart Call Card */
+.rep-nip-company-card {
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: 20px;
+}
+.rep-nip-company-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.rep-nip-legal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--lavender);
+  border: 1px solid var(--ink);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 750;
+}
+.rep-nip-company-card h3 {
+  font-size: 22px;
+  line-height: 1.25;
+  margin: 6px 0 10px;
+  letter-spacing: -.4px;
+}
+.rep-nip-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #23113f18;
+  font-size: 13px;
+}
+.rep-nip-smart-card {
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 26px 22px;
+  box-shadow: 5px 5px 0 var(--ink);
+  text-align: center;
+  margin: 18px 0 14px;
+}
+.rep-nip-smart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid var(--ink);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.rep-nip-smart-card h4 {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -.5px;
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+.rep-nip-smart-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #3b2c52;
+  max-width: 580px;
+  margin: 0 auto 20px;
+  text-align: left;
+}
+.rep-nip-smart-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #23113f25;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 650;
+  color: #2b1f3d;
+}

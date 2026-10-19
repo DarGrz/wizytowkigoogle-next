@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Building2, Check, Globe2, MapPin, MessageSquareWarning, RotateCcw, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Building2, Check, Globe2, MapPin, MessageSquareWarning, Phone, RotateCcw, ShieldCheck, Sparkles } from 'lucide-react';
 import type { ContentPage } from '@/lib/types';
 import ReputationOrder from './ReputationOrder';
 import { hasDatabase } from '@/lib/db';
@@ -22,7 +22,22 @@ export default function ReputationPage({ page }: { page: ContentPage }) {
         <span className="pill mint"><ShieldCheck size={16} /> Ochrona wizerunku w sieci</span>
         <h1>Dobra firma.<br />Dobre imię.<br /><span>Warto je chronić.</span></h1>
         <p>{page.intro}</p>
-        <div className="rep-hero-actions"><a href="#zlecenie" className="button dark">Zgłoś swoją sprawę <ArrowUpRight size={21} /></a><a href="#zakres-ochrony" className="text-link">Poznaj usługi</a></div>
+        <div className="rep-hero-actions">
+          <a href="tel:+48527275002" className="hero-phone-badge-large" aria-label="Zadzwoń: 527 275 002">
+            <span className="hero-phone-badge-icon">
+              <Phone size={22} />
+            </span>
+            <span className="hero-phone-badge-content">
+              <small>Zadzwoń i zapytaj • Bezpłatna diagnoza</small>
+              <strong>527 275 002</strong>
+            </span>
+            <span className="hero-phone-badge-action" aria-hidden="true">
+              <span>Zadzwoń</span>
+              <ArrowUpRight size={18} />
+            </span>
+          </a>
+          <a href="#zlecenie" className="button dark">Zgłoś swoją sprawę <ArrowUpRight size={21} /></a>
+        </div>
         <div className="rep-assurance"><ShieldCheck size={18} /> Najpierw analiza. Potem jasne warunki.</div>
       </div>
       <div className="rep-hero-art">

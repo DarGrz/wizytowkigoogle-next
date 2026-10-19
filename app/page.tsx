@@ -92,6 +92,10 @@ export default async function Home() {
                   <small>Zadzwoń i zapytaj</small>
                   <strong>527 275 002</strong>
                 </span>
+                <span className="hero-phone-badge-action" aria-hidden="true">
+                  <span>Zadzwoń</span>
+                  <ArrowUpRight size={18} />
+                </span>
               </a>
               <a className="button primary hero-check-btn" data-open-gmb-search href="#kontakt">
                 Sprawdź swoją wizytówkę <ArrowUpRight size={22} />

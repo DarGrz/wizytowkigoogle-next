@@ -276,7 +276,7 @@
   color: var(--ink);
   border: 2px solid var(--ink);
   border-radius: 999px;
-  padding: 10px 24px 10px 14px;
+  padding: 10px 20px 10px 14px;
   box-shadow: 4px 4px 0 var(--ink);
   text-decoration: none;
   cursor: pointer;
@@ -320,6 +320,50 @@
   font-size: 20px;
   font-weight: 900;
   letter-spacing: -.5px;
+}
+.hero-phone-badge-action {
+  display: none;
+}
+
+@media(min-width: 641px) {
+  .hero-main-cta {
+    width: 100%;
+    max-width: 440px;
+  }
+  .hero-phone-badge-large {
+    width: 100%;
+    max-width: 440px;
+    padding: 12px 20px 12px 14px;
+    gap: 16px;
+    justify-content: flex-start;
+  }
+  .hero-phone-badge-content {
+    flex: 1;
+  }
+  .hero-phone-badge-content strong {
+    font-size: 22px;
+  }
+  .hero-phone-badge-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--ink);
+    color: #ffffff;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .18s, transform .18s;
+    flex-shrink: 0;
+  }
+  .hero-phone-badge-large:hover .hero-phone-badge-action {
+    background: #3b2c52;
+    transform: translateX(2px);
+  }
+  .hero-check-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 @media(max-width:640px){

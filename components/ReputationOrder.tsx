@@ -1,220 +1,787 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowUpRight, Building2, Check, Globe2, MapPin, MessageSquareWarning, ShieldCheck, X } from 'lucide-react';
-import { isEligiblePortalProfileCompany, suggestProfileRemoval } from '@/lib/company';
-import type { BusinessSource } from '@/lib/order-services';
-import { formatPln, reputationPortalsQuote, reputationQuote, reviewPortals, type ReviewPortal, type ReputationTarget } from '@/lib/reputation-pricing';
-import BusinessLookup, { type BusinessSelection } from './BusinessLookup';
-import OrderForm from './OrderForm';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import {
+  AlertCircle,
+  AlertTriangle,
+  ArrowUpRight,
+  Building2,
+  CheckCircle2,
+  ExternalLink,
+  LoaderCircle,
+  MapPin,
+  Phone,
+  RotateCcw,
+  Search,
+  ShieldCheck,
+  Star,
+  X,
+} from 'lucide-react';
+import { normalizeNip, validNip, type RegistryCompany } from '@/lib/company';
 import type { LandingSelection } from '@/lib/service-landings';
+import type { GmbLocation } from '@/app/api/gmb-search/route';
 
-const sourceTitles = ['Skąd chcesz usunąć?', 'Co chcesz usunąć?'];
+interface PlaceDetails {
+  id: string;
+  name: string;
+  address: string;
+  googleMapsUrl?: string;
+  website?: string;
+  phoneNumber?: string;
+  rating?: number;
+  user_ratings_total?: number;
+  businessStatus?: string;
+  hasOpeningHours?: boolean;
+  hasPhotos?: boolean;
+}
 
-export default function ReputationOrder({ enabled, initialSelection }: { enabled: boolean; initialSelection?: LandingSelection }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const heading = useRef<HTMLHeadingElement>(null);
+export default function ReputationOrder({
+  enabled: _enabled,
+  initialSelection,
+}: {
+  enabled?: boolean;
+  initialSelection?: LandingSelection;
+}) {
   const trigger = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(1);
-  const [source, setSource] = useState<BusinessSource>('google');
-  const [target, setTarget] = useState<ReputationTarget>('reviews');
-  const [portal, setPortal] = useState<ReviewPortal>('google');
-  const [selectedPortals, setSelectedPortals] = useState<ReviewPortal[]>([]);
-  const [business, setBusiness] = useState<BusinessSelection | null>(null);
-  const [manual, setManual] = useState(false);
-  const [manualName, setManualName] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [complete, setComplete] = useState(false);
+  const [mode, setMode] = useState<'google' | 'nip'>(
+    initialSelection?.source === 'portals' ? 'nip' : 'google'
+  );
 
-  const portalProfile = source === 'portals' && target === 'profile';
-  const businessStep = source === 'portals' ? portalProfile ? 3 : 4 : 3;
-  const contactStep = source === 'portals' ? portalProfile ? 4 : 5 : 4;
-  const stageTitles = source === 'google'
-    ? [...sourceTitles, 'Znajdź swoją firmę.', 'Dane kontaktowe i potwierdzenie']
-    : portalProfile
-      ? [...sourceTitles, 'Podaj NIP i wybierz portale', 'Dane kontaktowe i potwierdzenie']
-      : [...sourceTitles, 'Wybierz portal', 'Znajdź swoją firmę.', 'Dane kontaktowe i potwierdzenie'];
-  const activeStep = step;
+  // Google Maps State
+  const [queryGoogle, setQueryGoogle] = useState('');
+  const [googleResults, setGoogleResults] = useState<GmbLocation[]>([]);
+  const [isSearchingGoogle, setIsSearchingGoogle] = useState(false);
+  const [isLoadingGoogleDetails, setIsLoadingGoogleDetails] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<PlaceDetails | null>(null);
+  const [googleError, setGoogleError] = useState<string | null>(null);
 
+  // NIP / GUS State
+  const [queryNip, setQueryNip] = useState('');
+  const [isSearchingNip, setIsSearchingNip] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<RegistryCompany | null>(null);
+  const [nipError, setNipError] = useState<string | null>(null);
+
+  // Open & trigger handlers
   useEffect(() => {
     function launch(element?: HTMLElement) {
       trigger.current = element || null;
-      setStep(initialSelection ? initialSelection.source === 'portals' && initialSelection.target === 'reviews' ? 4 : 3 : 1);
-      setSource(initialSelection?.source || 'google');
-      setTarget(initialSelection?.target || 'reviews');
-      setPortal(initialSelection?.portal || 'google');
-      setSelectedPortals(initialSelection?.portal ? [initialSelection.portal] : []);
-      setBusiness(null);
-      setManual(false);
-      setManualName('');
-      setComplete(false);
+      setMode(initialSelection?.source === 'portals' ? 'nip' : 'google');
+      setSelectedPlace(null);
+      setSelectedCompany(null);
+      setGoogleError(null);
+      setNipError(null);
       setOpen(true);
     }
+
     const onClick = (event: MouseEvent) => {
-      if (!(event.target instanceof Element) || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-      const element = event.target.closest<HTMLElement>('a[href="#zlecenie"], [data-open-reputation]');
+      if (
+        !(event.target instanceof Element) ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      const element = event.target.closest<HTMLElement>(
+        'a[href="#zlecenie"], [data-open-reputation]'
+      );
       if (!element?.closest('.reputation-page')) return;
       event.preventDefault();
       launch(element);
     };
-    const onHash = () => { if (location.hash === '#zlecenie') launch(); };
-    const onOpen = (event: Event) => launch(event instanceof CustomEvent && event.detail instanceof HTMLElement ? event.detail : undefined);
+
+    const onHash = () => {
+      if (location.hash === '#zlecenie') launch();
+    };
+
+    const onOpen = (event: Event) =>
+      launch(
+        event instanceof CustomEvent && event.detail instanceof HTMLElement
+          ? event.detail
+          : undefined
+      );
+
     document.addEventListener('click', onClick, true);
     window.addEventListener('hashchange', onHash);
     window.addEventListener('open-reputation-order', onOpen);
     onHash();
-    return () => { document.removeEventListener('click', onClick, true); window.removeEventListener('hashchange', onHash); window.removeEventListener('open-reputation-order', onOpen); };
+
+    return () => {
+      document.removeEventListener('click', onClick, true);
+      window.removeEventListener('hashchange', onHash);
+      window.removeEventListener('open-reputation-order', onOpen);
+    };
   }, [initialSelection]);
 
+  // Modal control & Escape listener
   useEffect(() => {
     if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
     const previousOverflow = document.body.style.overflow;
-    dialog.current?.showModal();
     document.body.style.overflow = 'hidden';
     return () => {
-      dialog.current?.close();
+      window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = previousOverflow;
       trigger.current?.focus();
     };
   }, [open]);
 
+  // Debounced Google search
   useEffect(() => {
-    if (open) {
-      heading.current?.focus();
-      dialog.current?.scrollTo({ top: 0 });
+    if (!open || mode !== 'google' || selectedPlace) return;
+    const trimmed = queryGoogle.trim();
+    if (trimmed.length < 2) {
+      setGoogleResults([]);
+      setGoogleError(null);
+      setIsSearchingGoogle(false);
+      return;
     }
-  }, [step, open, complete]);
 
-  const recommendation = business && target === 'reviews' && suggestProfileRemoval(source, target, business.registryCompany);
-  const service = source === 'portals'
-    ? target === 'reviews' ? 'usuwanie-opinii-portale' : 'usuwanie-profili'
-    : target === 'reviews' ? 'usuwanie-opinii' : 'usuwanie-wizytowki';
-  const sourceLabel = source === 'google' ? 'Mapy Google' : 'Strony z opiniami';
-  const canRemovePortalProfile = isEligiblePortalProfileCompany(business?.registryCompany);
-  const quotePortals = source === 'google' ? ['google' as const] : selectedPortals;
-  const quote = quotePortals.length ? reputationPortalsQuote(target, quotePortals) : reputationQuote(target, source === 'google' ? 'google' : portal);
+    const timer = setTimeout(async () => {
+      setIsSearchingGoogle(true);
+      setGoogleError(null);
+      try {
+        const res = await fetch(`/api/gmb-search?query=${encodeURIComponent(trimmed)}`);
+        if (!res.ok) throw new Error('Błąd wyszukiwania w Google');
+        const data = await res.json();
+        setGoogleResults(data.results || []);
+        if (!data.results || data.results.length === 0) {
+          setGoogleError('Nie znaleziono profilu w Google Maps. Dodaj miasto lub sprawdź nazwę.');
+        }
+      } catch {
+        setGoogleResults([]);
+        setGoogleError('Wystąpił problem z wyszukiwaniem. Spróbuj ponownie.');
+      } finally {
+        setIsSearchingGoogle(false);
+      }
+    }, 300);
 
-  function chooseSource(value: BusinessSource) {
-    setSource(value);
-    setBusiness(null);
-    setTarget('reviews');
-    setPortal(value === 'google' ? 'google' : 'aleo');
-    setSelectedPortals(value === 'google' ? ['google'] : []);
-    setManual(false);
-    setManualName('');
-    setStep(2);
-  }
+    return () => clearTimeout(timer);
+  }, [queryGoogle, open, mode, selectedPlace]);
 
-  function priceSummary() {
-    if (quote.kind === 'result') {
-      return quote.totalCents === null || quote.netCents === null
-        ? 'Wycena po bezpłatnej analizie. Warunki współpracy potwierdzamy przed rozpoczęciem.'
-        : `${formatPln(quote.netCents)} netto (${formatPln(quote.totalCents)} brutto) za skuteczne usunięcie opinii. Warunki potwierdzamy przed realizacją.`;
+  // Google Place select
+  const handleSelectGooglePlace = useCallback(async (location: GmbLocation) => {
+    setIsLoadingGoogleDetails(true);
+    setGoogleError(null);
+    try {
+      const res = await fetch(`/api/places-details?placeId=${encodeURIComponent(location.placeId)}`);
+      if (!res.ok) throw new Error('Nie udało się pobrać szczegółów wizytówki');
+      const data = await res.json();
+      if (data.details) {
+        setSelectedPlace(data.details);
+      } else {
+        setSelectedPlace({
+          id: location.placeId,
+          name: location.name,
+          address: location.address,
+          googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+            location.name + ' ' + location.address
+          )}&query_place_id=${location.placeId}`,
+        });
+      }
+    } catch {
+      setSelectedPlace({
+        id: location.placeId,
+        name: location.name,
+        address: location.address,
+        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          location.name + ' ' + location.address
+        )}&query_place_id=${location.placeId}`,
+      });
+    } finally {
+      setIsLoadingGoogleDetails(false);
     }
-    return `${formatPln(quote.netCents)} netto · ${formatPln(quote.totalCents)} brutto. Zgłoszenie bez opłaty na start — wkrótce skontaktuje się z Tobą przydzielony opiekun.`;
-  }
+  }, []);
 
-  return <>
-    <section id="zlecenie" className="rep-start-section">
-      <div className="wrap rep-start">
-        <div><p className="eyebrow">Zacznijmy od Twojej sprawy</p><h2>Kilka prostych pytań.<br />Jeden konkretny plan.</h2><p>Wybierz miejsce, wskaż opinię lub profil i znajdź swoją firmę. Resztę ustalimy razem.</p></div>
-        <div><button type="button" className="button dark" data-open-reputation>Zgłoś swoją sprawę <ArrowUpRight size={21} /></button><small><ShieldCheck size={16} /> Bezpłatna analiza zgłoszenia i wycena przed rozpoczęciem.</small></div>
-      </div>
-    </section>
-    <dialog ref={dialog} className="rep-dialog" aria-labelledby="reputation-dialog-title"
-      onKeyDown={(event) => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); if (!busy) setOpen(false); } }}
-      onCancel={(event) => { event.preventDefault(); if (!busy) setOpen(false); }}
-      onClose={() => setOpen(false)}
-      onClick={(event) => {
-        if (event.target !== event.currentTarget || busy) return;
-        const rect = event.currentTarget.getBoundingClientRect();
-        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) setOpen(false);
-      }}>
-      {open && <>
-        <header className="rep-dialog-header">
-          <span><ShieldCheck size={18} /> Ochrona wizerunku</span>
-          <button type="button" onClick={() => setOpen(false)} disabled={busy} aria-label="Zamknij zgłoszenie"><X size={22} /></button>
-        </header>
-        <div className="rep-dialog-body">
-          <div className="rep-progress" aria-label={`Krok ${activeStep} z ${stageTitles.length}`}>{stageTitles.map((title, index) => <span key={title} className={index < activeStep ? 'active' : ''} />)}</div>
-          <p className="eyebrow">{complete ? 'Dziękujemy za zgłoszenie' : `Krok ${activeStep} z ${stageTitles.length}`}</p>
-          <h2 ref={heading} tabIndex={-1} id="reputation-dialog-title">{complete ? 'Twoja sprawa została zapisana.' : stageTitles[activeStep - 1]}</h2>
-          {step > 1 && !complete && <p className="rep-path">{sourceLabel}{step > 2 && <> <span>→</span> {target === 'reviews' ? 'Opinie' : 'Profil firmy'}{source === 'portals' && step > 3 && <> <span>→</span> {reviewPortals.filter((item) => selectedPortals.includes(item.id)).map((item) => item.name).join(', ') || reviewPortals.find((item) => item.id === portal)?.name}</>}</>}</p>}
-          {step === 1 && <>
-            <p className="rep-dialog-intro">Najpierw wybierz miejsce, w którym pojawił się problem.</p>
-            <div className="rep-choice-grid">
-              <button type="button" className="rep-choice lavender" onClick={() => chooseSource('google')}><MapPin size={32} /><strong>Mapy Google</strong><span>Opinie lub wizytówka Twojej firmy w Google.</span><ArrowUpRight size={22} /></button>
-              <button type="button" className="rep-choice mint" onClick={() => chooseSource('portals')}><Globe2 size={32} /><strong>Strony z opiniami</strong><span>GoWork, Aleo, Panorama Firm i inne portale.</span><ArrowUpRight size={22} /></button>
-            </div>
-          </>}
-          {step === 2 && <>
-            <p className="rep-dialog-intro">Wybierz zakres zgłoszenia. Później możesz go zmienić.</p>
-            <div className="rep-choice-grid">
-              <button type="button" className="rep-choice peach" onClick={() => { setTarget('reviews'); setSelectedPortals(source === 'google' ? ['google'] : []); setStep(source === 'portals' ? 3 : businessStep); }}><MessageSquareWarning size={32} /><strong>Opinie</strong><span>Jedna lub kilka opinii naruszających zasady serwisu.</span><ArrowUpRight size={22} /></button>
-              <button type="button" className="rep-choice yellow" onClick={() => { setTarget('profile'); setSelectedPortals([]); if (source === 'portals') { setBusiness(null); setManual(false); } setStep(source === 'portals' ? 3 : businessStep); }}><Building2 size={32} /><strong>Profil firmy</strong><span>{source === 'google' ? 'Usunięcie wizytówki firmy w Mapach Google.' : 'Usunięcie całego profilu firmy z portalu.'}</span><ArrowUpRight size={22} /></button>
-            </div>
-          </>}
-          {step === 3 && source === 'portals' && !portalProfile && <>
-            <p className="rep-dialog-intro">Wybierz portal, którego dotyczy sprawa.</p>
-            <div className="rep-portal-list">{reviewPortals.map((item) => <button type="button" key={item.id} className={portal === item.id ? 'selected' : ''} onClick={() => { setPortal(item.id); setSelectedPortals([item.id]); setStep(businessStep); }}><Globe2 size={20} /><strong>{item.name}</strong><ArrowUpRight size={18} /></button>)}</div>
-          </>}
-          {((step === 3 && source === 'google') || step === businessStep) && <>
-            <p className="rep-dialog-intro">{source === 'portals' ? 'Podaj NIP. Pobierzemy dane firmy i sprawdzimy jej formę prawną w GUS.' : 'Wpisz nazwę i miejscowość, a następnie wybierz swoją wizytówkę.'}</p>
-            {!manual && <BusinessLookup key={source} source={source} onSelect={setBusiness} onClearSelection={() => { setBusiness(null); if (portalProfile) setSelectedPortals([]); }} autoSelectSingle={source === 'portals'} allowManualEntry={!portalProfile} />}
-            {!business && !portalProfile && <button type="button" className="text-link rep-manual-toggle" onClick={() => setManual(!manual)}>{manual ? 'Wróć do wyszukiwarki' : 'Nie znajduję firmy — wpiszę dane ręcznie'}</button>}
-            {manual && !business && !portalProfile && <form className="rep-manual-form" onSubmit={(event) => { event.preventDefault(); setBusiness({ company: manualName.trim(), profileUrl: '', address: '' }); }}>
-              <label>Nazwa firmy<input required minLength={2} maxLength={200} value={manualName} onChange={(event) => setManualName(event.target.value)} /></label>
-              <p>Bez danych GUS nie rozpoznamy formy prawnej. Zweryfikujemy ją indywidualnie po zgłoszeniu.</p>
-              <button className="button outline small" disabled={manualName.trim().length < 2}>Użyj tych danych <Check size={16} /></button>
-            </form>}
-            {business && <div className="rep-selected-company">
-              <div><Building2 size={23} /><strong>{business.company}</strong></div>
-              {business.address && <p>{business.address}</p>}
-              {business.registryCompany && <small>NIP: {business.registryCompany.nip} · REGON: {business.registryCompany.regon}<br />{business.registryCompany.legalFormLabel || 'Forma prawna nierozpoznana — wymaga indywidualnej weryfikacji.'}</small>}
-              <button type="button" className="text-link" onClick={() => { setBusiness(null); if (portalProfile) setSelectedPortals([]); }}>Zmień firmę</button>
-            </div>}
-            {business && portalProfile && !canRemovePortalProfile && <p className="rep-eligibility-warning" role="alert">
-              {business.registryCompany?.legalForm === 'other'
-                ? `Przykro nam — realizacja usunięcia profilu nie jest możliwa dla tej formy prawnej (${business.registryCompany.legalFormLabel || 'według danych GUS'}). Obsługujemy wyłącznie JDG i spółki cywilne zarejestrowane w CEIDG.`
-                : 'Nie możemy potwierdzić w GUS, że firma jest JDG lub spółką cywilną wpisaną do CEIDG. Z tego powodu nie możemy przyjąć zgłoszenia usunięcia profilu.'}
-            </p>}
-            {business && portalProfile && canRemovePortalProfile && <>
-              <p className="rep-dialog-intro">Wybierz jeden lub kilka profili do usunięcia. Cena za każdy portal jest widoczna poniżej.</p>
-              <div className="rep-portal-list">{reviewPortals.map((item) => {
-                const itemQuote = reputationQuote('profile', item.id);
-                const checked = selectedPortals.includes(item.id);
-                if (itemQuote.kind !== 'payu') return null;
-                return <button type="button" key={item.id} className={checked ? 'selected' : ''} role="checkbox" aria-checked={checked} onClick={() => {
-                  setSelectedPortals((current) => current.includes(item.id) ? current.filter((id) => id !== item.id) : [...current, item.id]);
-                }}>
-                  <span className="rep-portal-check">{checked ? <Check size={15} /> : null}</span>
-                  <strong>{item.name}</strong>
-                  <span className="rep-portal-price">{formatPln(itemQuote.netCents)} netto<br />{formatPln(itemQuote.totalCents)} brutto</span>
-                </button>;
-              })}</div>
-              {selectedPortals.length > 0 && <p className="rep-selected-total"><strong>Łącznie:</strong> {formatPln(quote.netCents!)} netto · {formatPln(quote.totalCents!)} brutto</p>}
-            </>}
-            {recommendation && <aside className="rep-recommendation" aria-labelledby="recommendation-title">
-              <span className="pill mint"><ShieldCheck size={15} /> Propozycja dla Twojej firmy</span>
-              <h3 id="recommendation-title">Rozważ usunięcie całego profilu.</h3>
-              <p>GUS wskazuje {business.registryCompany?.legalForm === 'sole-trader' ? 'jednoosobową działalność gospodarczą' : 'spółkę cywilną'}. Zamiast zgłaszać poszczególne opinie, możemy sprawdzić podstawy do usunięcia całego profilu firmy z portalu.</p>
-              <small>Forma prawna nie gwarantuje usunięcia. Możliwości zależą od okoliczności sprawy, przepisów i zasad portalu.</small>
-              <button type="button" className="button dark full" onClick={() => { setTarget('profile'); setStep(source === 'portals' ? 4 : contactStep); }}>Wybieram usuwanie profilu <ArrowUpRight size={19} /></button>
-              <button type="button" className="text-link" onClick={() => setStep(contactStep)}>Pozostaję przy usuwaniu opinii</button>
-            </aside>}
-            {business && !recommendation && (!portalProfile || canRemovePortalProfile) && (!portalProfile || selectedPortals.length > 0) && <button type="button" className="button dark full rep-next" onClick={() => setStep(contactStep)}>Dalej — dane kontaktowe <ArrowUpRight size={19} /></button>}
-          </>}
-          {business && step === contactStep && <div>
-            {!complete && <>
-              <div className="rep-summary"><Check size={18} /><span><strong>{quote.serviceName}</strong> · {sourceLabel}{source === 'portals' && <> · {reviewPortals.filter((item) => selectedPortals.includes(item.id)).map((item) => item.name).join(', ') || reviewPortals.find((item) => item.id === portal)?.name}</>}<br />{business.company}<br /><small>{priceSummary()}</small></span></div>
-            </>}
-            <OrderForm key={`${source}:${selectedPortals.join(',')}:${target}:${service}:${business.registryCompany?.regon || business.company}:${business.profileUrl}`} context="reputation" enabled={enabled} preset={{ source, service, business, target, portal: source === 'google' ? 'google' : selectedPortals[0] || portal, portals: quotePortals }} onBusyChange={setBusy} onComplete={() => setComplete(true)} />
-          </div>}
-          {step > 1 && !complete && <button type="button" className="rep-back text-link" disabled={busy} onClick={() => setStep(step - 1)}><ArrowLeft size={17} /> Wstecz</button>}
-          <p className="rep-dialog-safety"><ShieldCheck size={15} /> Analizujemy możliwości. Nie obiecujemy usunięcia każdej treści.</p>
+  // NIP Search via GUS
+  const handleSearchNip = async () => {
+    const raw = queryNip.trim();
+    if (!validNip(raw)) {
+      setNipError('Wpisz poprawny, 10-cyfrowy numer NIP firmy.');
+      return;
+    }
+    const nip = normalizeNip(raw);
+    setIsSearchingNip(true);
+    setNipError(null);
+    setSelectedCompany(null);
+    try {
+      const res = await fetch('/api/gus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nip }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Nie udało się pobrać danych z rejestru GUS.');
+      }
+      if (!data.results || data.results.length === 0) {
+        setNipError('Nie znaleziono firmy o podanym numerze NIP w rejestrze REGON/GUS.');
+        return;
+      }
+      setSelectedCompany(data.results[0]);
+    } catch (err) {
+      setNipError(err instanceof Error ? err.message : 'Wystąpił błąd podczas sprawdzania NIP.');
+    } finally {
+      setIsSearchingNip(false);
+    }
+  };
+
+  // Missing fields for Google diagnostics
+  const getMissingFields = (place: PlaceDetails) => {
+    const missing: { label: string; tip: string }[] = [];
+    if (!place.phoneNumber) {
+      missing.push({
+        label: 'Brak numeru telefonu',
+        tip: 'Klienci nie mogą zadzwonić jednym kliknięciem z poziomu Map Google.',
+      });
+    }
+    if (!place.website) {
+      missing.push({
+        label: 'Brak strony internetowej WWW',
+        tip: 'Wizytówka traci autorytet SEO i potencjalne zamówienia ze strony.',
+      });
+    }
+    if (place.hasOpeningHours === false) {
+      missing.push({
+        label: 'Brak zdefiniowanych godzin otwarcia',
+        tip: 'Google i klienci nie wiedzą, czy firma jest aktualnie otwarta.',
+      });
+    }
+    if (place.hasPhotos === false) {
+      missing.push({
+        label: 'Brak zdjęć profilowych',
+        tip: 'Wizytówki bez zdjęć generują mniej kliknięć i zapytań o trasę.',
+      });
+    }
+    return missing;
+  };
+
+  const isLowRating = selectedPlace?.rating !== undefined && selectedPlace.rating < 4.1;
+  const missingFields = selectedPlace ? getMissingFields(selectedPlace) : [];
+
+  return (
+    <>
+      <section id="zlecenie" className="rep-start-section">
+        <div className="wrap rep-start">
+          <div>
+            <p className="eyebrow">Zacznijmy od Twojej sprawy</p>
+            <h2>
+              Sprawdź wizytówkę lub NIP.<br />Zadzwoń do specjalisty.
+            </h2>
+            <p>
+              Wskaż swoją firmę w Mapach Google lub podaj NIP. Bezpłatnie przeanalizujemy możliwości
+              usunięcia negatywnych opinii lub całych profili.
+            </p>
+          </div>
+          <div>
+            <button
+              type="button"
+              className="button dark"
+              data-open-reputation
+              onClick={() => {
+                setOpen(true);
+                setSelectedPlace(null);
+                setSelectedCompany(null);
+                setGoogleError(null);
+                setNipError(null);
+              }}
+            >
+              Zgłoś swoją sprawę <ArrowUpRight size={21} />
+            </button>
+            <small>
+              <ShieldCheck size={16} /> Bezpłatna analiza sprawy i bezpośredni kontakt z opiekunem.
+            </small>
+          </div>
         </div>
-      </>}
-    </dialog>
-  </>;
+      </section>
+
+      {open && (
+        <div
+          className="gmb-modal-backdrop"
+          onClick={() => setOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reputation-dialog-title"
+        >
+          <div
+            className="gmb-modal"
+            style={{ width: 'min(680px, 100%)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="gmb-modal-header" style={{ padding: '20px 24px 16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <div className="gmb-modal-pill" style={{ margin: 0 }}>
+                  <ShieldCheck size={16} />
+                  <span>Ochrona wizerunku — Bezpłatna analiza</span>
+                </div>
+                <button
+                  type="button"
+                  className="gmb-close-btn"
+                  onClick={() => setOpen(false)}
+                  aria-label="Zamknij"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="gmb-modal-body">
+              {/* Tab Switcher */}
+              <div className="rep-tab-switch" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mode === 'google'}
+                  className={`rep-tab-btn ${mode === 'google' ? 'active' : ''}`}
+                  onClick={() => {
+                    setMode('google');
+                    setSelectedCompany(null);
+                    setNipError(null);
+                  }}
+                >
+                  <MapPin size={17} />
+                  <span>Mapy Google</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mode === 'nip'}
+                  className={`rep-tab-btn ${mode === 'nip' ? 'active' : ''}`}
+                  onClick={() => {
+                    setMode('nip');
+                    setSelectedPlace(null);
+                    setGoogleError(null);
+                  }}
+                >
+                  <Building2 size={17} />
+                  <span>Profil firmy po NIP</span>
+                </button>
+              </div>
+
+              {/* MODE 1: GOOGLE MAPS SEARCH & DIAGNOSTIC */}
+              {mode === 'google' && (
+                <>
+                  {!selectedPlace ? (
+                    <div>
+                      <h2 id="reputation-dialog-title">Znajdź firmę w Google Maps</h2>
+                      <p className="rep-dialog-intro">
+                        Wpisz nazwę swojej firmy oraz miejscowość. Pobierzemy dane profilu i sprawdzimy opinie.
+                      </p>
+
+                      <div className="lookup-input-row">
+                        <input
+                          type="text"
+                          value={queryGoogle}
+                          onChange={(e) => setQueryGoogle(e.target.value)}
+                          placeholder="Np. Kawiarnia Relaks Warszawa"
+                          aria-label="Wyszukaj wizytówkę w Google Maps"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          className="button dark small"
+                          disabled={isSearchingGoogle || queryGoogle.trim().length < 2}
+                        >
+                          {isSearchingGoogle ? (
+                            <LoaderCircle size={18} className="spin" />
+                          ) : (
+                            <Search size={18} />
+                          )}
+                          Szukaj
+                        </button>
+                      </div>
+
+                      {googleError && (
+                        <p className="lookup-message error" role="alert" style={{ color: '#b91c1c' }}>
+                          {googleError}
+                        </p>
+                      )}
+
+                      {isLoadingGoogleDetails && (
+                        <div style={{ textAlign: 'center', padding: '30px' }}>
+                          <LoaderCircle size={32} className="spin" />
+                          <p style={{ marginTop: '10px', fontSize: '14px' }}>
+                            Pobieramy szczegóły i statystyki wizytówki…
+                          </p>
+                        </div>
+                      )}
+
+                      {googleResults.length > 0 && !isLoadingGoogleDetails && (
+                        <ul className="lookup-results" style={{ marginTop: '16px' }}>
+                          {googleResults.map((item) => (
+                            <li key={item.placeId || item.id}>
+                              <button
+                                type="button"
+                                onClick={() => handleSelectGooglePlace(item)}
+                              >
+                                <span>
+                                  <strong>{item.name}</strong>
+                                  <small>{item.address}</small>
+                                </span>
+                                <span aria-hidden="true">↗</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ) : (
+                    /* Google Maps Diagnostics View */
+                    <div className="gmb-preview-body">
+                      {/* Top Business Card */}
+                      <div className="gmb-preview-card">
+                        <div className="gmb-preview-header">
+                          <div className="gmb-preview-badge">
+                            <ShieldCheck size={16} />
+                            <span>Znaleziono w Google Maps</span>
+                          </div>
+                          {selectedPlace.businessStatus && (
+                            <span className="gmb-status-tag">
+                              {selectedPlace.businessStatus === 'OPERATIONAL'
+                                ? 'Działalność otwarta'
+                                : selectedPlace.businessStatus}
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 className="gmb-preview-title">{selectedPlace.name}</h3>
+                        <p className="gmb-preview-address">
+                          <MapPin size={16} />
+                          <span>{selectedPlace.address}</span>
+                        </p>
+
+                        {/* Rating and Metrics */}
+                        <div className="gmb-metrics-row">
+                          {selectedPlace.rating !== undefined ? (
+                            <div className="gmb-metric-box">
+                              <div className="gmb-stars-row">
+                                <Star size={18} fill="#f59e0b" color="#f59e0b" />
+                                <strong>{selectedPlace.rating.toFixed(1)}</strong>
+                                <span className="gmb-metric-muted">/ 5.0</span>
+                              </div>
+                              <span className="gmb-metric-label">
+                                {selectedPlace.user_ratings_total
+                                  ? `${selectedPlace.user_ratings_total} opinii Google`
+                                  : 'Ocena profilu'}
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="gmb-metric-box">
+                              <span className="gmb-metric-label">Brak publicznych opinii</span>
+                            </div>
+                          )}
+
+                          <div className="gmb-metric-box">
+                            <span className="gmb-metric-val">
+                              {selectedPlace.phoneNumber || 'Brak w profilu'}
+                            </span>
+                            <span className="gmb-metric-label">Telefon w wizytówce</span>
+                          </div>
+                        </div>
+
+                        {/* External Links */}
+                        <div className="gmb-preview-links">
+                          {selectedPlace.googleMapsUrl && (
+                            <a
+                              href={selectedPlace.googleMapsUrl}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              className="gmb-ext-link"
+                            >
+                              <span>Zobacz w Google Maps</span>
+                              <ExternalLink size={14} />
+                            </a>
+                          )}
+                          {selectedPlace.website && (
+                            <a
+                              href={selectedPlace.website}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              className="gmb-ext-link"
+                            >
+                              <span>Strona WWW</span>
+                              <ExternalLink size={14} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Condition 1: Low Rating (< 4.1) Alert */}
+                      {isLowRating && selectedPlace.rating !== undefined && (
+                        <div className="gmb-alert-box low-rating">
+                          <div className="gmb-alert-top">
+                            <AlertTriangle size={22} className="gmb-alert-icon" />
+                            <div>
+                              <h4>Niska średnia ocen: {selectedPlace.rating.toFixed(1)} / 5.0</h4>
+                              <p>
+                                Średnia ocen poniżej 4.1 obniża zaufanie klientów i sprawia, że większość z nich wybiera konkurencję. Dla Twojego profilu rekomendujemy:
+                              </p>
+                            </div>
+                          </div>
+                          <div className="gmb-alert-actions">
+                            <a href="tel:+48527275002" className="gmb-choice-pill">
+                              🛡️ Usuwanie negatywnych opinii — zadzwoń: 527 275 002
+                            </a>
+                            <a href="tel:+48527275002" className="gmb-choice-pill">
+                              🔄 Resetowanie wizytówki (czysty profil) — zadzwoń: 527 275 002
+                            </a>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Condition 2: Completeness Check */}
+                      {missingFields.length > 0 ? (
+                        <div className="gmb-completeness-box warning">
+                          <div className="gmb-completeness-header">
+                            <AlertCircle size={18} />
+                            <span>
+                              Wykryto {missingFields.length}{' '}
+                              {missingFields.length === 1
+                                ? 'brakujący element'
+                                : missingFields.length < 5
+                                ? 'brakujące elementy'
+                                : 'brakujących elementów'}{' '}
+                              w profilu:
+                            </span>
+                          </div>
+                          <ul className="gmb-missing-list">
+                            {missingFields.map((field, idx) => (
+                              <li key={idx}>
+                                <span className="badge-missing">Brak</span>
+                                <div>
+                                  <strong>{field.label}</strong>
+                                  <small>{field.tip}</small>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : (
+                        <div className="gmb-completeness-box success">
+                          <CheckCircle2 size={18} />
+                          <span>
+                            Wizytówka posiada uzupełnione podstawowe pola (telefon, WWW, godziny, zdjęcia).
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Direct Phone Call Card */}
+                      <div className="gmb-phone-direct-card">
+                        <div className="gmb-phone-direct-badge">
+                          <Phone size={14} /> Bezpłatna konsultacja telefoniczna
+                        </div>
+                        <h4>Zadzwoń i omów swoją sprawę z ekspertem</h4>
+                        <p>
+                          Nasz doradca bezpłatnie przeanalizuje profil Twojej firmy, omówi negatywne opinie i przedstawi skuteczne kroki prawne.
+                        </p>
+                        <div className="gmb-modal-phone-wrap">
+                          <a
+                            href="tel:+48527275002"
+                            className="gmb-modal-phone-btn"
+                            aria-label="Zadzwoń do specjalisty: 527 275 002"
+                          >
+                            <span className="phone-pulse-icon">
+                              <Phone size={24} />
+                            </span>
+                            <div className="phone-badge-text">
+                              <small>Kliknij i połącz się</small>
+                              <strong>527 275 002</strong>
+                            </div>
+                          </a>
+                        </div>
+                        <div className="gmb-phone-direct-perks">
+                          <span>✓ Bezpłatna wstępna analiza profilu</span>
+                          <span>✓ Doradztwo prawne w usuwaniu nieprawdziwych ocen</span>
+                          <span>✓ Bez zobowiązań i bez formularzy</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="button outline full small gmb-back-btn"
+                        onClick={() => {
+                          setSelectedPlace(null);
+                          setGoogleError(null);
+                        }}
+                      >
+                        <RotateCcw size={16} /> Wyszukaj inną firmę w Google Maps
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* MODE 2: NIP / GUS SEARCH & SMART PHONE INVITATION */}
+              {mode === 'nip' && (
+                <>
+                  {!selectedCompany ? (
+                    <div>
+                      <h2 id="reputation-dialog-title">Sprawdź firmę po NIP (GUS)</h2>
+                      <p className="rep-dialog-intro">
+                        Wpisz 10-cyfrowy NIP firmy. Pobierzemy oficjalne dane z rejestru GUS i sprawdzimy możliwości usunięcia profili z portali.
+                      </p>
+
+                      <div className="lookup-input-row">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={12}
+                          value={queryNip}
+                          onChange={(e) => setQueryNip(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              void handleSearchNip();
+                            }
+                          }}
+                          placeholder="Np. 5261040828"
+                          aria-label="Wpisz NIP firmy"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          className="button dark small"
+                          onClick={() => void handleSearchNip()}
+                          disabled={isSearchingNip || queryNip.trim().length < 8}
+                        >
+                          {isSearchingNip ? (
+                            <LoaderCircle size={18} className="spin" />
+                          ) : (
+                            <Search size={18} />
+                          )}
+                          Szukaj w GUS
+                        </button>
+                      </div>
+
+                      {nipError && (
+                        <p className="lookup-message error" role="alert" style={{ color: '#b91c1c' }}>
+                          {nipError}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    /* NIP Company Card & Smart Phone Invitation */
+                    <div>
+                      {/* Official GUS Company Card */}
+                      <div className="rep-nip-company-card">
+                        <div className="rep-nip-company-header">
+                          <span className="pill mint">
+                            <ShieldCheck size={14} /> Dane z oficjalnego rejestru GUS
+                          </span>
+                          <span className="rep-nip-legal-pill">
+                            {selectedCompany.legalFormLabel ||
+                              (selectedCompany.legalForm === 'sole-trader'
+                                ? 'Jednoosobowa działalność gospodarcza (CEIDG)'
+                                : selectedCompany.legalForm === 'civil-partnership'
+                                ? 'Spółka cywilna'
+                                : 'Spółka prawa handlowego')}
+                          </span>
+                        </div>
+
+                        <h3>{selectedCompany.name}</h3>
+
+                        <div className="rep-nip-details-grid">
+                          <div>
+                            <span style={{ color: 'var(--muted)', fontSize: '11px', display: 'block' }}>
+                              NUMER NIP
+                            </span>
+                            <strong>{selectedCompany.nip}</strong>
+                          </div>
+                          <div>
+                            <span style={{ color: 'var(--muted)', fontSize: '11px', display: 'block' }}>
+                              NUMER REGON
+                            </span>
+                            <strong>{selectedCompany.regon}</strong>
+                          </div>
+                          <div style={{ gridColumn: '1 / -1' }}>
+                            <span style={{ color: 'var(--muted)', fontSize: '11px', display: 'block' }}>
+                              ADRES REJESTROWY
+                            </span>
+                            <span>{selectedCompany.address}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Smart Phone Invitation Card */}
+                      <div className="rep-nip-smart-card">
+                        <div className="rep-nip-smart-badge">
+                          <ShieldCheck size={15} /> Ochrona wizerunku i danych firmy
+                        </div>
+
+                        <h4>Zadzwoń i sprawdź możliwości usunięcia profili z portali</h4>
+
+                        <p>
+                          {selectedCompany.legalForm === 'sole-trader' ||
+                          selectedCompany.legalForm === 'civil-partnership' ? (
+                            <>
+                              Dla <strong>jednoosobowej działalności gospodarczej</strong> dane rejestrowe (NIP,
+                              nazwa, adres) podlegają ochronie przepisów o ochronie danych osobowych (RODO).
+                              Oznacza to <strong>silne podstawy prawne</strong> do żądania trwałego usunięcia
+                              profilu firmy i niechcianych wpisów z portali takich jak <strong>GoWork, Aleo,
+                              Panorama Firm, Cylex</strong> i innych baz. Zadzwoń do naszego doradcy —
+                              bezpłatnie zweryfikujemy Twoją sytuację i wskażemy najszybszą ścieżkę interwencji.
+                            </>
+                          ) : (
+                            <>
+                              Dla podmiotów prawa handlowego usunięcie profili oraz nieprawdziwych wpisów
+                              realizujemy w oparciu o <strong>regulaminy serwisów (GoWork, Aleo, Panorama
+                              Firm)</strong>, ochronę dóbr osobistych oraz przepisy o zwalczaniu nieuczciwej
+                              konkurencji. Zadzwoń do nas — bezpłatnie przeanalizujemy sytuację Twojej spółki i
+                              przedstawimy realne opcje prawne.
+                            </>
+                          )}
+                        </p>
+
+                        <div className="gmb-modal-phone-wrap">
+                          <a
+                            href="tel:+48527275002"
+                            className="gmb-modal-phone-btn"
+                            aria-label="Zadzwoń do opiekuna: 527 275 002"
+                          >
+                            <span className="phone-pulse-icon">
+                              <Phone size={24} />
+                            </span>
+                            <div className="phone-badge-text">
+                              <small>Kliknij i połącz się ze specjalistą</small>
+                              <strong>527 275 002</strong>
+                            </div>
+                          </a>
+                        </div>
+
+                        <div className="rep-nip-smart-perks">
+                          <span>✓ Bezpłatna weryfikacja podstaw prawnych dla NIP: {selectedCompany.nip}</span>
+                          <span>✓ Weryfikacja obecności w portalach: GoWork, Aleo, Panorama Firm i inne</span>
+                          <span>✓ Zero opłat z góry i brak skomplikowanych formularzy</span>
+                          <span>✓ Bezpośrednia rozmowa z dedykowanym opiekunem prawnym</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="button outline full small gmb-back-btn"
+                        onClick={() => {
+                          setSelectedCompany(null);
+                          setNipError(null);
+                        }}
+                      >
+                        <RotateCcw size={16} /> Sprawdź inny NIP
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+
+              <p className="rep-dialog-safety">
+                <ShieldCheck size={15} /> Analizujemy możliwości. Nie obiecujemy usunięcia każdej treści.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

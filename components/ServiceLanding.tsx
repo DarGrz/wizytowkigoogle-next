@@ -65,6 +65,10 @@ export default function ServiceLanding({ page, landing, pages }: {
               <small>Zadzwoń i zapytaj</small>
               <strong>527 275 002</strong>
             </span>
+            <span className="sl-hero-phone-action" aria-hidden="true">
+              <span>Zadzwoń</span>
+              <ArrowUpRight size={18} />
+            </span>
           </a>
           <a href="#zakres" className="text-link">Poznaj zakres usługi</a>
         </div>
