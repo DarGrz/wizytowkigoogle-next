@@ -216,10 +216,10 @@ export default function ReputationOrder({
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Nie udało się pobrać danych z rejestru GUS.');
+        throw new Error(data.error || 'Nie udało się pobrać danych firmy.');
       }
       if (!data.results || data.results.length === 0) {
-        setNipError('Nie znaleziono firmy o podanym numerze NIP w rejestrze REGON/GUS.');
+        setNipError('Nie znaleziono firmy o podanym numerze NIP.');
         return;
       }
       setSelectedCompany(data.results[0]);
@@ -620,9 +620,9 @@ export default function ReputationOrder({
                 <>
                   {!selectedCompany ? (
                     <div>
-                      <h2 id="reputation-dialog-title">Sprawdź firmę po NIP (GUS)</h2>
+                      <h2 id="reputation-dialog-title">Sprawdź firmę po NIP</h2>
                       <p className="rep-dialog-intro">
-                        Wpisz 10-cyfrowy NIP firmy. Pobierzemy oficjalne dane z rejestru GUS i sprawdzimy możliwości usunięcia profili z portali.
+                        Wpisz 10-cyfrowy NIP firmy. Pobierzemy dane i sprawdzimy możliwości usunięcia profili z portali.
                       </p>
 
                       <div className="lookup-input-row">
@@ -653,7 +653,7 @@ export default function ReputationOrder({
                           ) : (
                             <Search size={18} />
                           )}
-                          Szukaj w GUS
+                          Szukaj
                         </button>
                       </div>
 
@@ -666,11 +666,11 @@ export default function ReputationOrder({
                   ) : (
                     /* NIP Company Card & Smart Phone Invitation */
                     <div>
-                      {/* Official GUS Company Card */}
+                      {/* Company Card */}
                       <div className="rep-nip-company-card">
                         <div className="rep-nip-company-header">
                           <span className="pill mint">
-                            <ShieldCheck size={14} /> Dane z oficjalnego rejestru GUS
+                            <ShieldCheck size={14} /> Dane firmy
                           </span>
                           <span className="rep-nip-legal-pill">
                             {selectedCompany.legalFormLabel ||

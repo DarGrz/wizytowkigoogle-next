@@ -29,12 +29,17 @@ export async function POST(req: Request) {
       ? message.trim()
       : `Zgłoszenie ze strony wizytowkigoogle.pl dot. firmy: ${cleanCompany || 'Niewskazana'}. Prośba o kontakt telefoniczny (${cleanPhone || 'brak telefonu'}) lub mailowy.`;
 
-    const host = process.env.SMTP_HOST || 'mail-serwer217040.lh.pl';
+    const host = process.env.SMTP_HOST;
     const port = Number(process.env.SMTP_PORT || 465);
-    const user = process.env.SMTP_USER || 'kontakt@wizytowkigoogle.pl';
-    const pass = process.env.SMTP_PASS || 'Anakonda22!';
-    const from = process.env.SMTP_FROM || 'kontakt@wizytowkigoogle.pl';
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASS;
+    const from = process.env.SMTP_FROM || user || 'kontakt@wizytowkigoogle.pl';
     const to = process.env.CONTACT_EMAIL_TO || 'kontakt@wizytowkigoogle.pl';
+
+    if (!host || !user || !pass) {
+      console.warn('SMTP is not configured — contact form notification skipped');
+      return NextResponse.json({ ok: true });
+    }
 
     const transporter = nodemailer.createTransport({
       host,

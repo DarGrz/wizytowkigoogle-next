@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     if (!await rateLimit('order:' + ip.hash, 8, 600)) return Response.json({ error: 'Zbyt wiele zgłoszeń. Spróbuj za kilka minut.' }, { status: 429 });
     if (d.context === 'reputation' && d.businessSource === 'portals' && d.target === 'profile') {
       if (!d.registryCompany) {
-        return Response.json({ error: 'Aby zgłosić usunięcie profilu na portalu, musimy potwierdzić firmę w GUS.' }, { status: 400 });
+        return Response.json({ error: 'Aby zgłosić usunięcie profilu na portalu, musimy potwierdzić firmę.' }, { status: 400 });
       }
       try {
         const registeredCompanies = await searchGus(d.registryCompany.nip);
@@ -29,16 +29,16 @@ export async function POST(req: Request) {
           company.name === d.company
         );
         if (!verified) {
-          return Response.json({ error: 'Nie udało się potwierdzić danych firmy w GUS. Sprawdź NIP i wybierz firmę ponownie.' }, { status: 422 });
+          return Response.json({ error: 'Nie udało się potwierdzić danych firmy. Sprawdź NIP i wybierz firmę ponownie.' }, { status: 422 });
         }
         if (!isEligiblePortalProfileCompany(verified)) {
           return Response.json({
-            error: `Przykro nam — realizacja usunięcia profilu nie jest możliwa dla tej formy prawnej (${verified.legalFormLabel || 'według danych GUS'}). Obsługujemy wyłącznie JDG i spółki cywilne zarejestrowane w CEIDG.`,
+            error: `Przykro nam — realizacja usunięcia profilu nie jest możliwa dla tej formy prawnej (${verified.legalFormLabel || 'według rejestru'}). Obsługujemy wyłącznie JDG i spółki cywilne zarejestrowane w CEIDG.`,
           }, { status: 422 });
         }
       } catch (error) {
-        console.error(error instanceof Error ? error.message : 'GUS profile eligibility check failed');
-        return Response.json({ error: 'Nie udało się sprawdzić formy prawnej firmy w GUS. Spróbuj ponownie później.' }, { status: 503 });
+        console.error(error instanceof Error ? error.message : 'Profile eligibility check failed');
+        return Response.json({ error: 'Nie udało się sprawdzić formy prawnej firmy. Spróbuj ponownie później.' }, { status: 503 });
       }
     }
     const secret = process.env.IP_HASH_SECRET;
@@ -98,13 +98,15 @@ export async function POST(req: Request) {
 
       await conn.commit();
 
-      // Direct email via LH SMTP
+      // Direct email via configured SMTP
       try {
-        const host = process.env.SMTP_HOST || 'mail-serwer217040.lh.pl';
+        const host = process.env.SMTP_HOST;
         const port = Number(process.env.SMTP_PORT || 465);
-        const user = process.env.SMTP_USER || 'kontakt@wizytowkigoogle.pl';
-        const pass = process.env.SMTP_PASS || 'Anakonda22!';
-        const transporter = nodemailer.createTransport({ host, port, secure: port === 465, auth: { user, pass } });
+        const user = process.env.SMTP_USER;
+        const pass = process.env.SMTP_PASS;
+
+        if (host && user && pass) {
+          const transporter = nodemailer.createTransport({ host, port, secure: port === 465, auth: { user, pass } });
 
         await transporter.sendMail({
           from: '"wizytowkigoogle.pl" <kontakt@wizytowkigoogle.pl>',
@@ -120,6 +122,7 @@ export async function POST(req: Request) {
           subject: `Nowe zgłoszenie ${reference} — ${d.company}`,
           text: `Nowe zgłoszenie ${reference}\nFirma: ${d.company}\nUsługa: ${quote?.serviceName || d.service}\nTelefon: ${d.phone}\nEmail: ${d.email}\nProfil URL: ${d.profileUrl || 'brak'}\nOpis: ${d.description || 'brak'}\n\nWkrótce skontaktuje się z klientem przydzielony opiekun.`,
         });
+        }
       } catch (mailError) {
         console.error('Direct mail delivery notification error:', mailError);
       }

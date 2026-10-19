@@ -181,7 +181,7 @@ export default function OrderForm({ service = '', enabled = true, context = 'goo
         <div className="preselected-badge">
           <MapPin size={16} />
           <span>
-            {registryCompany ? 'Firma z GUS: ' : 'Wizytówka Google: '}
+            {registryCompany ? 'Firma: ' : 'Wizytówka Google: '}
             <strong>{preselectedInfo}</strong>
             {registryCompany && <small>NIP: {registryCompany.nip} · REGON: {registryCompany.regon}<br />{registryCompany.address}</small>}
           </span>
@@ -293,7 +293,7 @@ export default function OrderForm({ service = '', enabled = true, context = 'goo
                 setBillingNip(registryCompany.nip);
                 setBillingAddress(registryCompany.address);
               }} />
-              <span>Użyj danych firmy znalezionej w GUS</span>
+              <span>Użyj danych znalezionej firmy</span>
             </label>
             <label className="checkbox">
               <input type="radio" name="billingSource" checked={billingSource === 'other'} onChange={() => {

@@ -24,13 +24,13 @@ export async function POST(request: Request) {
   const birKey = process.env.BIR_API_KEY || 'fc3f6a1b7b3d439fbc91';
   if (process.env.BIR_API_KEY === '' || process.env.BIR_API_URL === '' || !birUrl || !birKey) {
     console.error('GUS_NOT_CONFIGURED');
-    return Response.json({ error: 'Wyszukiwarka GUS jest chwilowo niedostępna. Wpisz dane firmy ręcznie.' }, { status: 503 });
+    return Response.json({ error: 'Wyszukiwarka firm jest chwilowo niedostępna. Wpisz dane firmy ręcznie.' }, { status: 503 });
   }
   if (Date.now() - windowStart >= 60000) {
     windowStart = Date.now();
     requests = 0;
   }
-  if (++requests > 40) return Response.json({ error: 'Limit wyszukiwań GUS. Spróbuj ponownie za minutę.' }, { status: 429, headers: { 'Retry-After': '60' } });
+  if (++requests > 40) return Response.json({ error: 'Limit wyszukiwań. Spróbuj ponownie za minutę.' }, { status: 429, headers: { 'Retry-After': '60' } });
   try {
     const results = await searchGus(parsed.data.nip);
     if (results && results.length > 0) {
@@ -47,6 +47,6 @@ export async function POST(request: Request) {
     return Response.json({ results }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {
     console.error('GUS_LOOKUP_FAILED');
-    return Response.json({ error: 'Nie udało się pobrać danych z GUS. Spróbuj ponownie lub wpisz firmę ręcznie.' }, { status: 502 });
+    return Response.json({ error: 'Nie udało się pobrać danych firmy. Spróbuj ponownie lub wpisz firmę ręcznie.' }, { status: 502 });
   }
 }

@@ -64,18 +64,18 @@ export default function BusinessLookup({ source, onSelect, onClearSelection, aut
 
   return (
     <div className="business-lookup">
-      <label htmlFor="business-query">{isGus ? <Building2 size={16} /> : <MapPin size={16} />}{isGus ? 'Znajdź firmę w GUS' : 'Znajdź wizytówkę w Google Maps'}</label>
+      <label htmlFor="business-query">{isGus ? <Building2 size={16} /> : <MapPin size={16} />}{isGus ? 'Znajdź firmę po NIP' : 'Znajdź wizytówkę w Google Maps'}</label>
       <div className="lookup-input-row">
         <input id="business-query" value={query} inputMode={isGus ? 'numeric' : 'text'} maxLength={isGus ? 20 : 200}
           placeholder={isGus ? 'NIP firmy, np. 5261040828' : 'Nazwa firmy i miejscowość'}
           aria-describedby="lookup-help"
           onChange={(event) => { controller.current?.abort(); onClearSelection?.(); setBusy(false); setQuery(event.target.value); setResults([]); setMessage(''); }}
           onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); void search(); } }} />
-        <button type="button" className="button dark small" onClick={search} disabled={busy} aria-label={isGus ? 'Szukaj w GUS' : 'Szukaj w Google Maps'}>
+        <button type="button" className="button dark small" onClick={search} disabled={busy} aria-label={isGus ? 'Szukaj po NIP' : 'Szukaj w Google Maps'}>
           {busy ? <LoaderCircle size={18} className="spin" /> : <Search size={18} />} Szukaj
         </button>
       </div>
-      <small id="lookup-help">{isGus ? 'GUS identyfikuje firmę po NIP. Link do opinii lub profilu na portalu podasz osobno.' : 'Wybierz swoją firmę — uzupełnimy nazwę i link do wizytówki.'}</small>
+      <small id="lookup-help">{isGus ? 'Wyszukiwanie firmy po numerze NIP.' : 'Wybierz swoją firmę — uzupełnimy nazwę i link do wizytówki.'}</small>
       <p className="lookup-message" role="status">{busy ? 'Wyszukujemy firmę…' : message}</p>
       {results.length > 0 && <ul className="lookup-results">{results.map((item) => (
         <li key={item.registryCompany?.regon || item.profileUrl}>

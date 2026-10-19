@@ -76,7 +76,7 @@ export default function ReputationPage({ page }: { page: ContentPage }) {
       {[
         ...page.faq,
         { question: 'Czy usuwanie negatywnych opinii jest legalne?', answer: 'Tak. Wszystkie działania prowadzimy w oparciu o obowiązujące przepisy prawa, ochronę dóbr osobistych oraz regulaminy platform internetowych.' },
-        { question: 'Jak działa formularz zgłoszenia?', answer: 'W oknie zgłoszenia wybierasz najpierw Mapy Google albo Strony z opiniami, a następnie opinię lub profil. Wizytówkę Google wyszukasz po nazwie i miejscowości. Dla stron z opiniami podajesz NIP, aby pobrać firmę i formę prawną z GUS.' },
+        { question: 'Jak działa formularz zgłoszenia?', answer: 'W oknie zgłoszenia wybierasz najpierw Mapy Google albo Strony z opiniami, a następnie opinię lub profil. Wizytówkę Google wyszukasz po nazwie i miejscowości. Dla stron z opiniami podajesz NIP, aby sprawdzić firmę i jej formę prawną.' },
         { question: 'Dlaczego proponujecie usunięcie całego profilu?', answer: 'Jeśli zgłaszasz profil w katalogu zewnętrznym (np. Aleo, Panorama Firm), a firma ma formę JDG lub spółki cywilnej, często najskuteczniejszym krokiem jest usunięcie całego profilu wraz z danymi. Możesz wybrać tę opcję lub skupić się na samych opiniach.' },
         { question: 'Czy zgłoszenie jest płatne?', answer: 'Wysłanie zapytania jest całkowicie bezpłatne. Wycenę oraz plan działania przedstawiamy po wstępnej analizie profilu.' },
         { question: 'Czy wystawiacie faktury VAT?', answer: 'Tak, za wszystkie wykonane usługi wystawiamy fakturę VAT.' },
