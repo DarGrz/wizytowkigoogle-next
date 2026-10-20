@@ -59,7 +59,15 @@ export default function Footer() {
         <summary>Usługi i poradniki</summary>
         <div>
           {pages
-            .filter((p) => !p.slug.includes('opini') && !p.eyebrow.toLowerCase().includes('opini'))
+            .filter(
+              (p) =>
+                !p.slug.includes('usuw') &&
+                !p.slug.includes('usun') &&
+                !p.slug.includes('opini') &&
+                !p.eyebrow.toLowerCase().includes('usuw') &&
+                !p.eyebrow.toLowerCase().includes('usun') &&
+                !p.eyebrow.toLowerCase().includes('opini')
+            )
             .map((p) => (
               <Link key={p.slug} href={'/' + p.slug}>
                 {p.eyebrow}
