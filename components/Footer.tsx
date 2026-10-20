@@ -58,11 +58,13 @@ export default function Footer() {
       <details className="footer-links">
         <summary>Usługi i poradniki</summary>
         <div>
-          {pages.map((p) => (
-            <Link key={p.slug} href={'/' + p.slug}>
-              {p.eyebrow}
-            </Link>
-          ))}
+          {pages
+            .filter((p) => !p.slug.includes('opini') && !p.eyebrow.toLowerCase().includes('opini'))
+            .map((p) => (
+              <Link key={p.slug} href={'/' + p.slug}>
+                {p.eyebrow}
+              </Link>
+            ))}
         </div>
       </details>
 
