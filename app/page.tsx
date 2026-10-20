@@ -54,7 +54,7 @@ export default async function Home() {
           </div>
           <p>
             Wszystko dla Twojej wizytówki Google.
-            <br className="desktop-break" /> Pozycjonowanie, reklama i usuwanie opinii.
+            <br className="desktop-break" /> Pozycjonowanie, reklama i wizerunek.
           </p>
 
           <div className="hero-pillars">
