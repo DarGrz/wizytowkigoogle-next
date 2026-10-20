@@ -24,20 +24,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-16635868132';
+
   return (
     <html lang="pl">
       <head>
         {/* Google tag (gtag.js) */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-16635868132"
+          src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}
           strategy="afterInteractive"
         />
-        <Script id="google-tag-aw-16635868132" strategy="afterInteractive">
+        <Script id="google-tag-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'AW-16635868132');
+            gtag('config', '${googleAdsId}');
           `}
         </Script>
       </head>

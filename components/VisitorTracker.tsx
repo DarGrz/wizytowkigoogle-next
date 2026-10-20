@@ -153,6 +153,34 @@ export default function VisitorTracker() {
         if (recentClicks.has(key)) return;
         recentClicks.add(key);
         sendData(collectData('PHONE_CLICK', phone));
+
+        // Fire Google Ads conversion and gtag event
+        try {
+          if (typeof window !== 'undefined') {
+            const w = window as any;
+            if (typeof w.gtag === 'function') {
+              w.gtag('event', 'phone_call_click', {
+                event_category: 'engagement',
+                event_label: phone,
+                value: 1,
+              });
+              const conversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
+              if (conversionLabel) {
+                w.gtag('event', 'conversion', {
+                  send_to: conversionLabel,
+                  value: 1.0,
+                  currency: 'PLN',
+                });
+              }
+            }
+            if (Array.isArray(w.dataLayer)) {
+              w.dataLayer.push({
+                event: 'phone_click',
+                phone_number: phone,
+              });
+            }
+          }
+        } catch {}
       }
     }
 
