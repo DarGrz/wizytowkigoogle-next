@@ -21,12 +21,12 @@
   },
   {
     "id": "ochrona-wizerunku",
-    "name": "Ochrona Wizerunku",
-    "short": "Ochrona wizerunku",
+    "name": "Ochrona profilu firmy",
+    "short": "Ochrona profilu",
     "slug": "ochrona-wizerunku.html",
-    "description": "Usuwanie nieprawdziwych opinii, szkodliwych wpisów i niechcianych wizytówek.",
+    "description": "Zabezpieczenie profilu, pomoc techniczna, obsługa zawieszeń i duplikatów.",
     "color": "mint",
     "icon": "shield",
-    "badge": "Bezpieczna marka"
+    "badge": "Bezpieczny profil"
   }
 ]

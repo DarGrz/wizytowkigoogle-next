@@ -9,20 +9,16 @@ export const dynamic = 'force-dynamic';
 
 const homepageFaqs: [string, string][] = [
   [
-    'Czy usuwanie negatywnych opinii i informacji jest legalne?',
-    'Tak. Działamy w pełni legalnie w oparciu o obowiązujące przepisy prawa, ochronę dóbr osobistych oraz oficjalne regulaminy platform internetowych.',
-  ],
-  [
     'Jak wygląda rozpoczęcie współpracy?',
-    'Wystarczy przesłać zapytanie przez formularz kontaktowy lub zadzwonić. Bezpłatnie analizujemy profil i sytuację Twojej firmy, a następnie przedstawiamy konkretne możliwości działania i wycenę.',
-  ],
-  [
-    'Jak długo trwa realizacja usługi?',
-    'Wstępną analizę wykonujemy zazwyczaj w ciągu 24–48 godzin roboczych. Czas potrzebny na usunięcie wpisu lub wdrożenie kampanii zależy od platformy (np. Google Maps, Aleo, GoWork) i wynosi zazwyczaj od kilku dni do 2–3 tygodni.',
+    'Wystarczy do nas zadzwonić lub przesłać zapytanie. Bezpłatnie analizujemy profil i sytuację Twojej firmy w Google, a następnie przedstawiamy konkretne możliwości działania i wycenę.',
   ],
   [
     'W jakich obszarach wspieracie lokalne firmy?',
-    'Kompleksowo dbamy o obecność w Google: od profesjonalnego pozycjonowania wizytówki w Mapach, przez skuteczne kampanie reklamowe Google Ads, aż po ochronę wizerunku (usuwanie nieprawdziwych opinii, duplikatów i niechcianych profili).',
+    'Kompleksowo dbamy o obecność w Google: od profesjonalnego pozycjonowania wizytówki w Mapach, przez skuteczne kampanie reklamowe Google Ads, aż po bieżące wsparcie techniczne i bezpieczeństwo profilu.',
+  ],
+  [
+    'Jak długo trwa realizacja usługi pozycjonowania lub reklamy?',
+    'Wstępną analizę wykonujemy zazwyczaj w ciągu 24–48 godzin. Kampanie Google Ads uruchamiamy natychmiast, a pierwsze efekty pozycjonowania w Mapach widoczne są zazwyczaj w ciągu kilku tygodni.',
   ],
   [
     'Czy muszę podawać hasło do konta Google?',
@@ -58,7 +54,7 @@ export default async function Home() {
           </div>
           <p>
             Wszystko dla Twojej wizytówki Google.
-            <br className="desktop-break" /> Pozycjonowanie, reklama i ochrona wizerunku.
+            <br className="desktop-break" /> Pozycjonowanie, reklama i usuwanie opinii.
           </p>
 
           <div className="hero-pillars">
@@ -78,7 +74,7 @@ export default async function Home() {
               <span className="pillar-icon-box mint-box">
                 <ShieldCheck size={15} />
               </span>
-              <strong>Ochrona Wizerunku</strong>
+              <strong>Usuwanie opinii</strong>
             </Link>
           </div>
 
