@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, Mail, Phone } from 'lucide-react';
-import { defaultPages as pages } from '@/lib/service-landings';
 
 export default function Footer() {
   return (
@@ -55,31 +54,9 @@ export default function Footer() {
         <Link href="/polityka-prywatnosci">Prywatność</Link>
       </div>
 
-      <details className="footer-links">
-        <summary>Usługi i poradniki</summary>
-        <div>
-          {pages
-            .filter(
-              (p) =>
-                !p.slug.includes('usuw') &&
-                !p.slug.includes('usun') &&
-                !p.slug.includes('opini') &&
-                !p.eyebrow.toLowerCase().includes('usuw') &&
-                !p.eyebrow.toLowerCase().includes('usun') &&
-                !p.eyebrow.toLowerCase().includes('opini')
-            )
-            .map((p) => (
-              <Link key={p.slug} href={'/' + p.slug}>
-                {p.eyebrow}
-              </Link>
-            ))}
-        </div>
-      </details>
-
       <div className="footer-bottom">
         <span>© 2023–{new Date().getFullYear()} wizytowkigoogle.pl</span>
         <span>Niezależny serwis. Nie jesteśmy częścią Google.</span>
-        <Link href="/admin">Panel obsługi</Link>
       </div>
     </footer>
   );
