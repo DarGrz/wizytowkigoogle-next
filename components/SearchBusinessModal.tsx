@@ -382,19 +382,19 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
                 <div className="gmb-alert-top">
                   <AlertTriangle size={22} className="gmb-alert-icon" />
                   <div>
-                    <h4>Niska średnia ocen: {selectedPlace.rating.toFixed(1)} / 5.0</h4>
+                    <h4>Średnia ocen: {selectedPlace.rating.toFixed(1)} / 5.0 — rekomendacja poprawy</h4>
                     <p>
-                      Średnia ocen poniżej 4.1 obniża zaufanie klientów i sprawia, że większość z nich wybiera konkurencję.
-                      Dla Twojego profilu rekomendujemy podjęcie natychmiastowych kroków:
+                      Średnia ocen poniżej 4.1 może obniżać zaufanie potencjalnych klientów i widoczność w wynikach Google.
+                      Dla Twojego profilu rekomendujemy profesjonalne działania optymalizacyjne:
                     </p>
                   </div>
                 </div>
                 <div className="gmb-alert-actions">
                   <a href="tel:+48572275002" className="gmb-choice-pill">
-                    🛡️ Usuwanie negatywnych opinii — zadzwoń
+                    ⭐ Strategia pozyskiwania nowych ocen — zadzwoń
                   </a>
                   <a href="tel:+48572275002" className="gmb-choice-pill">
-                    🔄 Resetowanie wizytówki (czysty profil) — zadzwoń
+                    📈 Poprawa pozycji w Mapach Google — zadzwoń
                   </a>
                 </div>
               </div>
@@ -436,7 +436,7 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
               </div>
               <h4>Zadzwoń i omów swoją wizytówkę</h4>
               <p>
-                Nasz doradca bezpłatnie przeanalizuje profil Twojej firmy, omówi wykryte braki i podpowie jak poprawić pozycję lub usunąć niechciane opinie.
+                Nasz doradca bezpłatnie przeanalizuje profil Twojej firmy w Google, omówi wykryte braki i podpowie jak skutecznie zwiększyć widoczność oraz liczbę klientów.
               </p>
               <div className="gmb-modal-phone-wrap">
                 <a
@@ -456,7 +456,7 @@ export default function SearchBusinessModal({ isOpen, onClose }: SearchBusinessM
               <div className="gmb-phone-direct-perks">
                 <span>✓ Bezpłatna wstępna analiza profilu</span>
                 <span>✓ Porady dostosowane do Twojej branży</span>
-                <span>✓ Bez zobowiązań i bez formularzy</span>
+                <span>✓ Zgodność z wytycznymi i regulaminem Google</span>
               </div>
             </div>
 

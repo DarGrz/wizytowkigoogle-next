@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | wizytowkigoogle.pl'
   },
   description:
-    'Pozycjonowanie wizytówek Google, reklama Google Ads i pomoc w usuwaniu profili. Jasne zasady, obsługa zleceń i rozliczenie za ustalony efekt.',
+    'Pozycjonowanie wizytówek Google, reklama Google Ads oraz optymalizacja profilu firmy w Google Maps. Jasne zasady i profesjonalne wsparcie dla Twojego biznesu.',
   robots: process.env.NEXT_PUBLIC_SITE_URL?.includes('localhost')
     ? { index: false, follow: false }
     : { index: true, follow: true }
