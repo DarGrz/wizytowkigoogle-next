@@ -1,20 +1,15 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
-import { Menu, X, ArrowUpRight, Search, ChevronDown, Phone } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X, ArrowUpRight, Search, Phone } from 'lucide-react';
 import SearchBusinessModal from '@/components/SearchBusinessModal';
 
 export default function Header() {
-  const path = usePathname();
-  const reputation = path === '/ochrona-wizerunku.html' || path.startsWith('/usuwanie-') || path === '/jak-usunac-firme-z-google';
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOpenSearch = () => setSearchOpen(true);
@@ -33,17 +28,6 @@ export default function Header() {
       window.removeEventListener('open-gmb-search', handleOpenSearch);
       document.removeEventListener('click', handleClick);
     };
-  }, []);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setServicesOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
   // Monitor scroll position for mobile sticky phone badge
@@ -72,34 +56,6 @@ export default function Header() {
           </Link>
 
           <nav className={open ? 'navigation open' : 'navigation'} aria-label="Nawigacja główna">
-            {/* Usługi dropdown (desktop) / expanded list (mobile) */}
-            <div className="nav-dropdown" ref={dropdownRef}>
-              <button
-                type="button"
-                className="nav-dropdown-trigger"
-                onClick={() => setServicesOpen(!servicesOpen)}
-                aria-expanded={servicesOpen}
-              >
-                Usługi <ChevronDown size={15} className={servicesOpen ? 'chevron-flip' : ''} />
-              </button>
-              {servicesOpen && (
-                <div className="nav-dropdown-menu">
-                  <Link onClick={() => { setOpen(false); setServicesOpen(false); }} href="/pozycjonowanie-wizytowki-google.html">
-                    Pozycjonowanie wizytówki
-                  </Link>
-                  <Link onClick={() => { setOpen(false); setServicesOpen(false); }} href="/reklama-google-ads.html">
-                    Reklama Google Ads
-                  </Link>
-                  <Link onClick={() => { setOpen(false); setServicesOpen(false); }} href="/ochrona-wizerunku.html">
-                    Ochrona Wizerunku
-                  </Link>
-                  <Link onClick={() => { setOpen(false); setServicesOpen(false); }} href="/#uslugi">
-                    Wszystkie usługi
-                  </Link>
-                </div>
-              )}
-            </div>
-
             <button
               type="button"
               className="header-search-btn"
